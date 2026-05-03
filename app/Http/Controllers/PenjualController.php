@@ -1,0 +1,99 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class PenjualController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    public function index()
+    {
+        $products = Auth::user()->products()->latest()->paginate(10);
+        return view('penjual.index', compact('products'));
+    }
+
+    public function create()
+    {
+        return view('penjual.create');
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1',
+            'image' => 'nullable|image|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('products', 'public');
+        }
+
+        $data['user_id'] = Auth::id();
+
+        Product::create($data);
+
+        return redirect()->route('penjual.produk.index')->with('success', 'Produk berhasil dibuat.');
+    }
+
+    public function show(Product $produk)
+    {
+        if ($produk->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        return view('penjual.show', ['product' => $produk]);
+    }
+
+    public function edit(Product $produk)
+    {
+        if ($produk->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        return view('penjual.edit', ['product' => $produk]);
+    }
+
+    public function update(Request $request, Product $produk)
+    {
+        if ($produk->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1',
+            'image' => 'nullable|image|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('products', 'public');
+        }
+
+        $produk->update($data);
+
+        return redirect()->route('penjual.produk.index')->with('success', 'Produk berhasil diperbarui.');
+    }
+
+    public function destroy(Product $produk)
+    {
+        if ($produk->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $produk->delete();
+
+        return redirect()->route('penjual.produk.index')->with('success', 'Produk berhasil dihapus.');
+    }
+}

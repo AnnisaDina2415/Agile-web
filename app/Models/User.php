@@ -46,4 +46,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Products created by the user (penjual)
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }
