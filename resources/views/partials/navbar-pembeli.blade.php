@@ -14,10 +14,17 @@
 
     <!-- Right -->
     <div class="flex items-center gap-4">
-        <div class="relative">
+        <!-- Shopping Cart -->
+        <a href="#" class="relative hover:opacity-75 transition">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M7 4V3c0-.55.45-1 1-1s1 .45 1 1v1h6V3c0-.55.45-1 1-1s1 .45 1 1v1h3c1.1 0 2 .9 2 2v16c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2h3zm9 18H8v-2h8v2zm3-4H4V8h16v10z"/></svg>
             <span class="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-1 rounded-full">0</span>
-        </div>
+        </a>
+
+        <!-- Chat -->
+        <a href="{{ route('chat.index') }}" class="relative hover:opacity-75 transition">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+            <span class="absolute -top-2 -right-2 bg-emerald-500 text-white text-xs px-1 rounded-full hidden" id="unreadBadge">0</span>
+        </a>
 
         <!-- Profile Dropdown -->
         <div class="relative" data-dropdown>
@@ -99,4 +106,28 @@
             }
         });
     });
+
+    // Load unread chat count
+    async function updateUnreadCount() {
+        try {
+            const response = await fetch('{{ route("chat.unread-count") }}');
+            const data = await response.json();
+            const badge = document.getElementById('unreadBadge');
+            
+            if (data.unread_count > 0) {
+                badge.textContent = data.unread_count;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        } catch (error) {
+            console.error('Error fetching unread count:', error);
+        }
+    }
+    
+    // Update on page load
+    updateUnreadCount();
+    
+    // Update every 10 seconds
+    setInterval(updateUnreadCount, 10000);
 </script>

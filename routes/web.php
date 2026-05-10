@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\PenjualController;
 use App\Http\Controllers\Pembeli\DashboardController;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +22,16 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/pembeli/dashboard', [DashboardController::class, 'index'])
     ->name('pembeli.dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::prefix('chat')->name('chat.')->group(function () {
+        Route::get('/', [ChatController::class, 'index'])->name('index');
+        Route::get('/{conversation}', [ChatController::class, 'show'])->name('show');
+        Route::post('/{conversation}/send', [ChatController::class, 'sendMessage'])->name('send');
+        Route::post('/start', [ChatController::class, 'startChat'])->name('start');
+        Route::get('/unread-count', [ChatController::class, 'getUnreadCount'])->name('unread-count');
+    });
+});
 
 Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
