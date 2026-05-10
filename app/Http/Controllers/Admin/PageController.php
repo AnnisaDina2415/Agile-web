@@ -147,7 +147,7 @@ class PageController extends Controller
     {
         $categories = Category::withCount('products')
             ->orderByDesc('products_count')
-            ->get();
+            ->paginate(15);
 
         return view('admin.categories.index', compact('categories'));
     }
@@ -407,9 +407,17 @@ class PageController extends Controller
 
     public function users()
     {
-        $users = User::latest()->get();
+        $users = User::latest()->paginate(15);
 
         return view('admin.users.index', compact('users'));
+    }
+
+    public function toggleUserStatus(User $user)
+    {
+        $user->update(['is_active' => !$user->is_active]);
+
+        $status = $user->is_active ? 'aktif' : 'non-aktif';
+        return redirect()->route('admin.users.index')->with('success', "User {$user->name} berhasil diubah menjadi {$status}");
     }
 
     public function admins()
@@ -419,7 +427,7 @@ class PageController extends Controller
             ->join('roles', 'set_roles.role_id', '=', 'roles.id')
             ->where('roles.role_name', 'admin')
             ->select('users.*', 'roles.role_name')
-            ->get();
+            ->paginate(15);
 
         return view('admin.admins.index', compact('admins'));
     }

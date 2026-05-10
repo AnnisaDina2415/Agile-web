@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessageSent;
 use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\User;
@@ -56,13 +57,23 @@ class ChatController extends Controller
             'message' => 'required|string|max:5000',
         ]);
 
-        Message::create([
+        $message = Message::create([
             'conversation_id' => $conversation->id,
             'sender_id' => Auth::id(),
             'message' => $validated['message'],
         ]);
 
         $conversation->update(['last_message_at' => now()]);
+
+        // Broadcast the message using Reverb
+        MessageSent::dispatch($message, $conversation);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $message->load('sender'),
+            ]);
+        }
 
         return back()->with('success', 'Pesan terkirim');
     }
@@ -79,7 +90,9 @@ class ChatController extends Controller
         $otherUser = User::findOrFail($validated['user_id']);
 
         if ($user->id === $otherUser->id) {
-            return back()->with('error', 'Tidak bisa chat dengan diri sendiri');
+            return response()->json([
+                'error' => 'Tidak bisa chat dengan diri sendiri'
+            ], 422);
         }
 
         // Find existing conversation or create new one
@@ -111,6 +124,13 @@ class ChatController extends Controller
                     'product_id' => $validated['product_id'] ?? null,
                 ]);
             }
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'conversation_id' => $conversation->id,
+                'redirect' => route('chat.show', $conversation)
+            ]);
         }
 
         return redirect()->route('chat.show', $conversation);

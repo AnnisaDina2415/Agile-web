@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -40,7 +41,7 @@ class AuthController extends Controller
 
             // ✅ cek role dan redirect sesuai role
             $user = Auth::user();
-            $userRole = \DB::table('set_roles')
+            $userRole = DB::table('set_roles')
                 ->join('roles', 'set_roles.role_id', '=', 'roles.id')
                 ->where('set_roles.user_id', $user->id)
                 ->first();

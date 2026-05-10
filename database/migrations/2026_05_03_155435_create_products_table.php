@@ -33,7 +33,7 @@ return new class extends Migration
             $table->enum('condition', ['baru', 'bekas']);
 
             // status produk
-            $table->enum('status', ['aktif', 'nonaktif', 'sold'])
+            $table->enum('status', ['aktif', 'sold'])
                   ->default('aktif');
 
             $table->timestamps();

@@ -96,16 +96,23 @@
                             </span>
                         </td>
                         <td class="px-4 py-3">
-                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
-                                {{ ucfirst($product->status) }}
-                            </span>
+                            <div class="flex gap-2">
+                                <span class="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                                    {{ ucfirst($product->status) }}
+                                </span>
+                                <span class="px-3 py-1 rounded-full text-xs font-medium {{ $product->is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                    {{ $product->is_active ? 'Aktif' : 'Non-Aktif' }}
+                                </span>
+                            </div>
                         </td>
                         <td class="px-4 py-3 flex gap-2">
                             <a href="{{ route('penjual.produk.edit', $product) }}" class="px-3 py-1 text-sm bg-yellow-100 text-yellow-700 rounded-lg hover:bg-yellow-200 transition">Edit</a>
-                            <form action="{{ route('penjual.produk.destroy', $product) }}" method="post" class="inline">
+                            <form action="{{ route('penjual.produk.toggle-active', $product) }}" method="post" class="inline">
                                 @csrf
-                                @method('DELETE')
-                                <button class="px-3 py-1 text-sm bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition" onclick="return confirm('Hapus produk ini?')">Hapus</button>
+                                @method('PATCH')
+                                <button class="px-3 py-1 text-sm {{ $product->is_active ? 'bg-red-100 text-red-700 hover:bg-red-200' : 'bg-green-100 text-green-700 hover:bg-green-200' }} rounded-lg transition" onclick="return confirm('{{ $product->is_active ? 'Non-aktifkan' : 'Aktifkan' }} produk ini?')">
+                                    {{ $product->is_active ? 'Non-Aktif' : 'Aktif' }}
+                                </button>
                             </form>
                         </td>
                     </tr>

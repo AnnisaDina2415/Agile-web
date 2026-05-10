@@ -15,6 +15,10 @@
     <main class="p-6">
         @yield('content')
     </main>
-<script src="//unpkg.com/alpinejs" defer></script>
+    
+    @stack('scripts')
+    
+    @vite('resources/js/app.js')
+    <script src="//unpkg.com/alpinejs" defer></script>
 </body>
 </html>

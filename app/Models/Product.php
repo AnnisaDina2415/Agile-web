@@ -22,6 +22,7 @@ class Product extends Model
         'quantity',
         'status',
         'image',
+        'is_active',
     ];
 
     public function images()
@@ -37,5 +38,15 @@ class Product extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
     }
 }

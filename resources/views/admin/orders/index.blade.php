@@ -1,26 +1,20 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Pesanan')
-@section('page-title', 'Pesanan')
+@section('title', 'History Transaksi')
+@section('page-title', 'History Transaksi')
 
 @section('content')
 <div class="flex items-center justify-between mb-6">
     <div>
-        <p class="text-sm text-slate-500">Tinjau pesanan terbaru dan kelola status pengiriman.</p>
+        <p class="text-sm text-slate-500">Lihat riwayat semua transaksi di platform.</p>
     </div>
-    <a href="{{ route('admin.orders.index') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold hover:bg-brand-700 transition-colors">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-        </svg>
-        Segarkan
-    </a>
 </div>
 
 <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
     <table class="min-w-full text-left text-sm divide-y divide-slate-200">
         <thead class="bg-slate-50 text-slate-600">
             <tr>
-                <th class="px-6 py-3 font-semibold">ID Pesanan</th>
+                <th class="px-6 py-3 font-semibold">ID Transaksi</th>
                 <th class="px-6 py-3 font-semibold">Pembeli</th>
                 <th class="px-6 py-3 font-semibold">Total</th>
                 <th class="px-6 py-3 font-semibold">Tanggal</th>
@@ -46,7 +40,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="6" class="px-6 py-8 text-center text-slate-500">Belum ada pesanan.</td>
+                <td colspan="6" class="px-6 py-8 text-center text-slate-500">Belum ada transaksi.</td>
             </tr>
             @endforelse
         </tbody>

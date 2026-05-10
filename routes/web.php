@@ -1,10 +1,16 @@
 <?php
 
+use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\PenjualController;
 use App\Http\Controllers\Pembeli\DashboardController;
+use App\Http\Controllers\Pembeli\ProductController;
+use App\Http\Controllers\Pembeli\SellerController;
+use App\Http\Controllers\Pembeli\CartController;
+use App\Http\Controllers\Pembeli\ProfileController;
+use App\Http\Controllers\SellerApplicationController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -20,20 +26,46 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/pembeli/dashboard', [DashboardController::class, 'index'])
-    ->name('pembeli.dashboard');
+// Admin Auth Routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AdminAuthController::class, 'login'])->name('login.post');
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+});
 
-Route::middleware('auth')->group(function () {
+// Pembeli Routes with Role Check
+Route::middleware(['auth', 'role:pembeli'])->group(function () {
+    Route::get('/pembeli/dashboard', [DashboardController::class, 'index'])->name('pembeli.dashboard');
+    Route::get('/pembeli/products/{id}', [ProductController::class, 'show'])->name('pembeli.products.show');
+    Route::get('/pembeli/sellers/{id}', [SellerController::class, 'show'])->name('pembeli.sellers.show');
+
+    Route::prefix('pembeli/cart')->name('pembeli.cart.')->group(function () {
+        Route::get('/', [CartController::class, 'index'])->name('index');
+        Route::post('/add', [CartController::class, 'add'])->name('add');
+        Route::post('/{item}/update', [CartController::class, 'update'])->name('update');
+        Route::delete('/{item}/remove', [CartController::class, 'remove'])->name('remove');
+        Route::post('/clear', [CartController::class, 'clear'])->name('clear');
+        Route::get('/count', [CartController::class, 'getCount'])->name('count');
+    });
+
     Route::prefix('chat')->name('chat.')->group(function () {
         Route::get('/', [ChatController::class, 'index'])->name('index');
-        Route::get('/{conversation}', [ChatController::class, 'show'])->name('show');
-        Route::post('/{conversation}/send', [ChatController::class, 'sendMessage'])->name('send');
         Route::post('/start', [ChatController::class, 'startChat'])->name('start');
         Route::get('/unread-count', [ChatController::class, 'getUnreadCount'])->name('unread-count');
+        Route::get('/{conversation}', [ChatController::class, 'show'])->name('show');
+        Route::post('/{conversation}/send', [ChatController::class, 'sendMessage'])->name('send');
+    });
+
+    Route::prefix('pembeli/profile')->name('pembeli.profile.')->group(function () {
+        Route::get('/', [ProfileController::class, 'show'])->name('show');
+        Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
+        Route::put('/', [ProfileController::class, 'update'])->name('update');
+        Route::post('/upload-ktp', [ProfileController::class, 'uploadKTP'])->name('upload-ktp');
     });
 });
 
-Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
+// Admin Routes
+Route::prefix('admin')->middleware('auth:admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [PageController::class, 'dashboard'])->name('dashboard');
 
     Route::get('/products', [PageController::class, 'products'])->name('products.index');
@@ -57,11 +89,7 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     Route::get('/reports/show', [PageController::class, 'showReportDetail'])->name('reports.show');
 
     Route::get('/users', [PageController::class, 'users'])->name('users.index');
-    Route::get('/users/create', [PageController::class, 'createUser'])->name('users.create');
-    Route::post('/users', [PageController::class, 'storeUser'])->name('users.store');
-    Route::get('/users/{user}/edit', [PageController::class, 'editUser'])->name('users.edit');
-    Route::put('/users/{user}', [PageController::class, 'updateUser'])->name('users.update');
-    Route::delete('/users/{user}', [PageController::class, 'destroyUser'])->name('users.destroy');
+    Route::patch('/users/{user}/toggle-status', [PageController::class, 'toggleUserStatus'])->name('users.toggle-status');
 
     Route::get('/admins', [PageController::class, 'admins'])->name('admins.index');
     Route::get('/admins/create', [PageController::class, 'createAdmin'])->name('admins.create');
@@ -70,10 +98,16 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     Route::put('/admins/{user}', [PageController::class, 'updateAdmin'])->name('admins.update');
     Route::delete('/admins/{user}', [PageController::class, 'destroyAdmin'])->name('admins.destroy');
 
+    Route::get('/seller-applications', [SellerApplicationController::class, 'index'])->name('seller-applications.index');
+    Route::patch('/seller-applications/{application}/approve', [SellerApplicationController::class, 'approve'])->name('seller-applications.approve');
+    Route::post('/seller-applications/{application}/reject', [SellerApplicationController::class, 'reject'])->name('seller-applications.reject');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-Route::prefix('penjual')->name('penjual.')->group(function () {
+// Penjual Routes with Role Check
+Route::middleware(['auth', 'role:penjual'])->prefix('penjual')->name('penjual.')->group(function () {
     Route::get('/dashboard', [PenjualController::class, 'dashboard'])->name('dashboard');
     Route::resource('produk', PenjualController::class);
+    Route::patch('produk/{produk}/toggle-active', [PenjualController::class, 'toggleActive'])->name('produk.toggle-active');
 });

@@ -120,4 +120,16 @@ class PenjualController extends Controller
 
         return redirect()->route('penjual.produk.index')->with('success', 'Produk berhasil dihapus.');
     }
+
+    public function toggleActive(Product $produk)
+    {
+        if ($produk->user_id !== (Auth::id() ?? 1)) {
+            abort(403);
+        }
+
+        $produk->update(['is_active' => !$produk->is_active]);
+
+        $status = $produk->is_active ? 'aktif' : 'non-aktif';
+        return redirect()->route('penjual.dashboard')->with('success', "Produk berhasil diubah menjadi {$status}.");
+    }
 }
