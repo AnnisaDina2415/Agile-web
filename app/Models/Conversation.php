@@ -1,0 +1,67 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+/**
+ * Conversation model
+ *
+ * @property int $id
+ * @property int $seller_id
+ * @property int $buyer_id
+ * @property int|null $product_id
+ * @property string|null $subject
+ * @property \Illuminate\Support\Carbon|null $last_message_at
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property-read \App\Models\User $seller
+ * @property-read \App\Models\User $buyer
+ * @property-read \App\Models\Product|null $product
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Message[] $messages
+ * @property-read \App\Models\Message|null $latestMessage
+ */
+class Conversation extends Model
+{
+    protected $fillable = ['seller_id', 'buyer_id', 'product_id', 'subject', 'last_message_at'];
+    protected $casts = [
+        'last_message_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    public function seller(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'seller_id');
+    }
+
+    public function buyer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'buyer_id');
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class)->orderBy('created_at', 'asc');
+    }
+
+    public function latestMessage()
+    {
+        return $this->hasOne(Message::class)->latestOfMany();
+    }
+
+    public function unreadCount($userId)
+    {
+        return $this->messages()
+            ->where('sender_id', '!=', $userId)
+            ->where('is_read', false)
+            ->count();
+    }
+}
