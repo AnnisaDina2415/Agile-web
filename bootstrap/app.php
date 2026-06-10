@@ -14,6 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckUserRole::class,
         ]);
+        $middleware->validateCsrfTokens(except: [
+            '/midtrans/callback',
+            'logout',
+            'admin/logout',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

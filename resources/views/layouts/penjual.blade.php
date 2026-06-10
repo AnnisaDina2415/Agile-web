@@ -3,41 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>@yield('title', 'ReGoods Penjual')</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     @vite('resources/css/app.css')
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-gradient-to-br from-[#A7F3D0] via-[#D1FAE5] to-[#A7F3D0] min-h-screen text-slate-800 font-sans antialiased">
 
     <div class="flex">
         <!-- Sidebar -->
-        <aside class="w-64 bg-white shadow h-screen sticky top-0">
+        <aside class="w-64 bg-[#ECFDF5]/90 border-r border-emerald-300 shadow h-screen sticky top-0">
             <div class="p-6">
                 <div class="flex items-center gap-3">
-                    <div class="bg-green-500 p-2 rounded-md text-white">RG</div>
+                    <div class="bg-green-600 p-2 rounded-md text-white font-bold">RG</div>
                     <div>
-                        <div class="font-bold">ReGoods</div>
-                        <div class="text-sm text-gray-500">Panel Penjual</div>
+                        <div class="font-bold text-emerald-900">ReGoods</div>
+                        <div class="text-sm text-emerald-700">Panel Penjual</div>
                     </div>
                 </div>
             </div>
 
             <nav class="px-4 py-2">
-                <a class="block px-3 py-2 rounded-md bg-green-50 text-green-600 mb-1" href="#">Ringkasan</a>
-                <a class="block px-3 py-2 rounded-md hover:bg-gray-100" href="#">Kelola Admin</a>
-                <a class="block px-3 py-2 rounded-md hover:bg-gray-100" href="#">Kelola Pengguna</a>
-                <a class="block px-3 py-2 rounded-md hover:bg-gray-100" href="{{ route('penjual.produk.index') }}">Kelola Produk</a>
-                <a class="block px-3 py-2 rounded-md hover:bg-gray-100" href="#">Transaksi</a>
-                <a class="block px-3 py-2 rounded-md hover:bg-gray-100" href="#">Kategori</a>
+                <a class="block px-3 py-2 rounded-md bg-emerald-100 text-emerald-800 mb-1" href="#">Ringkasan</a>
+                <a class="block px-3 py-2 rounded-md hover:bg-emerald-50 text-emerald-700" href="#">Kelola Admin</a>
+                <a class="block px-3 py-2 rounded-md hover:bg-emerald-50 text-emerald-700" href="#">Kelola Pengguna</a>
+                <a class="block px-3 py-2 rounded-md hover:bg-emerald-50 text-emerald-700" href="{{ route('penjual.produk.index') }}">Kelola Produk</a>
+                <a class="block px-3 py-2 rounded-md hover:bg-emerald-50 text-emerald-700" href="#">Transaksi</a>
+                <a class="block px-3 py-2 rounded-md hover:bg-emerald-50 text-emerald-700" href="#">Kategori</a>
             </nav>
         </aside>
 
         <!-- Main -->
         <div class="flex-1 min-h-screen">
-            <header class="bg-white shadow-sm">
+            <header class="bg-[#ECFDF5]/80 border-b border-emerald-200 shadow-sm">
                 <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-                    <h2 class="text-xl font-semibold">@yield('header', 'Ringkasan Admin')</h2>
+                    <h2 class="text-xl font-semibold text-emerald-950">@yield('header', 'Ringkasan Admin')</h2>
                     <div class="flex items-center gap-4">
-                        <div class="text-sm text-gray-500">{{ now()->format('d M Y') }}</div>
+                        <div class="text-sm text-emerald-700">{{ now()->format('d M Y') }}</div>
                         
                         <!-- Profile Dropdown -->
                         <div class="relative group">

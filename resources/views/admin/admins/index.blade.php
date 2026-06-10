@@ -17,14 +17,14 @@
 </div>
 
 @if (session('success'))
-    <div class="mb-4 p-4 bg-green-50 text-green-700 rounded-lg border border-green-200">
+    <div class="mb-4 p-4 bg-brand-100 text-brand-900 rounded-xl border border-brand-200">
         {{ session('success') }}
     </div>
 @endif
 
-<div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-    <table class="min-w-full text-left text-sm divide-y divide-slate-200">
-        <thead class="bg-slate-50 text-slate-600">
+<div class="glassmorphism rounded-3xl shadow-sm overflow-hidden">
+    <table class="min-w-full text-left text-sm divide-y divide-brand-200/50">
+        <thead class="bg-emerald-50/50 text-slate-800 border-b border-brand-200/50">
             <tr>
                 <th class="px-6 py-3 font-semibold">Nama</th>
                 <th class="px-6 py-3 font-semibold">Email</th>
@@ -32,14 +32,14 @@
                 <th class="px-6 py-3 font-semibold">Aksi</th>
             </tr>
         </thead>
-        <tbody class="divide-y divide-slate-100 bg-white">
+        <tbody class="divide-y divide-brand-100/40">
             @forelse($admins as $admin)
-            <tr>
-                <td class="px-6 py-4 text-slate-700 font-medium">{{ $admin->name }}</td>
+            <tr class="hover:bg-emerald-50/30">
+                <td class="px-6 py-4 text-slate-700 font-semibold">{{ $admin->name }}</td>
                 <td class="px-6 py-4 text-slate-500">{{ $admin->email }}</td>
                 <td class="px-6 py-4 text-slate-500">{{ $admin->phone ?? '-' }}</td>
-                <td class="px-6 py-4 text-right space-x-3">
-                    <a href="{{ route('admin.admins.edit', $admin->id) }}" class="text-brand-600 hover:text-brand-700 font-semibold">Edit</a>
+                <td class="px-6 py-4 space-x-3">
+                    <a href="{{ route('admin.admins.edit', $admin->id) }}" class="text-brand-700 hover:text-brand-600 font-semibold">Edit</a>
                     <form action="{{ route('admin.admins.destroy', $admin->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus admin ini?');">
                         @csrf
                         @method('DELETE')

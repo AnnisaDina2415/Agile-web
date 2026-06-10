@@ -1,137 +1,162 @@
 @extends('layouts.penjual-new')
 
-@section('title', 'Dashboard Penjual')
+@section('title', 'Dashboard Penjual - ReGoods')
 
 @section('content')
 
-<!-- Dashboard Header -->
-<div class="mb-6">
-    <h1 class="text-2xl font-bold text-gray-800">Dashboard Penjual</h1>
-    <p class="text-gray-500 text-sm">{{ now()->format('l, d F Y') }}</p>
+{{-- Header --}}
+<div style="margin-bottom:1.5rem;">
+    <h1 style="font-size:1.2rem; font-weight:700; color:#212121; margin:0 0 .25rem;">Selamat datang, {{ Auth::user()->name ?? 'Penjual' }}! 👋</h1>
+    <p style="font-size:.82rem; color:#9E9E9E; margin:0;">{{ now()->isoFormat('dddd, D MMMM Y') }}</p>
 </div>
 
-<!-- KPI Cards -->
-<div class="grid grid-cols-4 gap-6 mb-8">
-    <!-- Total Produk -->
-    <div class="bg-white rounded-2xl shadow hover:shadow-lg transition p-6">
-        <div class="flex items-start justify-between">
+{{-- KPI Cards --}}
+<div style="display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1.5rem;">
+
+    {{-- Total Produk --}}
+    <div style="background:#fff; border:1px solid #E0E0E0; border-radius:10px; padding:1.25rem;">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between;">
             <div>
-                <p class="text-gray-500 text-sm font-medium">Total Produk</p>
-                <p class="text-3xl font-bold text-gray-800 mt-2">{{ $totalProducts ?? 0 }}</p>
+                <p style="font-size:.78rem; color:#9E9E9E; margin:0 0 .4rem; font-weight:500;">Total Produk</p>
+                <p style="font-size:1.8rem; font-weight:800; color:#212121; margin:0; line-height:1;">{{ $totalProducts ?? 0 }}</p>
             </div>
-            <svg class="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path d="M7 2h10v2H7V2m11 4v10h2V6h-2m-2-4H8v2h8V2M4 6h14v12H4V6m2 2v8h10V8H6z"/></svg>
+            <div style="width:40px; height:40px; background:#F3FFED; border-radius:10px; display:flex; align-items:center; justify-content:center;">
+                <svg style="width:20px; height:20px; color:#03AC0E;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                </svg>
+            </div>
         </div>
+        <p style="font-size:.72rem; color:#03AC0E; margin:.5rem 0 0; font-weight:500;">Produk aktif terdaftar</p>
     </div>
 
-    <!-- Total Penjualan -->
-    <div class="bg-white rounded-2xl shadow hover:shadow-lg transition p-6">
-        <div class="flex items-start justify-between">
+    {{-- Total Penjualan --}}
+    <div style="background:#fff; border:1px solid #E0E0E0; border-radius:10px; padding:1.25rem;">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between;">
             <div>
-                <p class="text-gray-500 text-sm font-medium">Total Penjualan</p>
-                <p class="text-3xl font-bold text-green-600 mt-2">{{ $totalSales ?? 0 }}</p>
+                <p style="font-size:.78rem; color:#9E9E9E; margin:0 0 .4rem; font-weight:500;">Total Penjualan</p>
+                <p style="font-size:1.8rem; font-weight:800; color:#03AC0E; margin:0; line-height:1;">{{ $totalSales ?? 0 }}</p>
             </div>
-            <svg class="w-8 h-8 text-green-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m1 15h-2v-2h2v2m0-4h-2V7h2v6z"/></svg>
+            <div style="width:40px; height:40px; background:#FFF3E0; border-radius:10px; display:flex; align-items:center; justify-content:center;">
+                <svg style="width:20px; height:20px; color:#FF6224;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                </svg>
+            </div>
         </div>
+        <p style="font-size:.72rem; color:#FF6224; margin:.5rem 0 0; font-weight:500;">Total transaksi selesai</p>
     </div>
 
-    <!-- Rating Toko -->
-    <div class="bg-white rounded-2xl shadow hover:shadow-lg transition p-6">
-        <div class="flex items-start justify-between">
+    {{-- Rating --}}
+    <div style="background:#fff; border:1px solid #E0E0E0; border-radius:10px; padding:1.25rem;">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between;">
             <div>
-                <p class="text-gray-500 text-sm font-medium">Rating Toko</p>
-                <div class="flex items-center gap-1 mt-2">
-                    <p class="text-2xl font-bold text-gray-800">{{ $storeRating ?? '4.5' }}</p>
-                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2l-2.81 6.63L2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <p style="font-size:.78rem; color:#9E9E9E; margin:0 0 .4rem; font-weight:500;">Rating Toko</p>
+                <div style="display:flex; align-items:center; gap:.35rem;">
+                    <p style="font-size:1.8rem; font-weight:800; color:#212121; margin:0; line-height:1;">{{ $storeRating ?? '4.5' }}</p>
+                    <svg style="width:18px; height:18px; color:#FFA500;" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2l-2.81 6.63L2 9.24l5.46 4.73L5.82 21z"/>
+                    </svg>
                 </div>
             </div>
-            <svg class="w-8 h-8 text-purple-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5m-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11m3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5"/></svg>
+            <div style="width:40px; height:40px; background:#FFF8E1; border-radius:10px; display:flex; align-items:center; justify-content:center;">
+                <svg style="width:20px; height:20px; color:#FFA500;" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2l-2.81 6.63L2 9.24l5.46 4.73L5.82 21z"/>
+                </svg>
+            </div>
         </div>
+        <p style="font-size:.72rem; color:#9E9E9E; margin:.5rem 0 0; font-weight:500;">Dari ulasan pembeli</p>
     </div>
 
-    <!-- Pesanan Menunggu -->
-    <div class="bg-white rounded-2xl shadow hover:shadow-lg transition p-6">
-        <div class="flex items-start justify-between">
+    {{-- Pesanan --}}
+    <div style="background:#fff; border:1px solid #E0E0E0; border-radius:10px; padding:1.25rem;">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between;">
             <div>
-                <p class="text-gray-500 text-sm font-medium">Pesanan Menunggu</p>
-                <p class="text-3xl font-bold text-orange-600 mt-2">{{ $pendingOrders ?? 0 }}</p>
+                <p style="font-size:.78rem; color:#9E9E9E; margin:0 0 .4rem; font-weight:500;">Pesanan Menunggu</p>
+                <p style="font-size:1.8rem; font-weight:800; color:#FF6224; margin:0; line-height:1;">{{ $pendingOrders ?? 0 }}</p>
             </div>
-            <svg class="w-8 h-8 text-orange-500" fill="currentColor" viewBox="0 0 24 24"><path d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-1.1 0-2 .9-2 2h2V5z"/></svg>
+            <div style="width:40px; height:40px; background:#FEF3F2; border-radius:10px; display:flex; align-items:center; justify-content:center;">
+                <svg style="width:20px; height:20px; color:#FF6224;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
         </div>
+        <p style="font-size:.72rem; color:#FF6224; margin:.5rem 0 0; font-weight:500;">Perlu segera diproses</p>
     </div>
 </div>
 
-<!-- Manage Products Section -->
-<div class="bg-white rounded-2xl shadow p-6">
-    <div class="flex items-center justify-between mb-6">
-        <h2 class="text-lg font-bold text-gray-800">Kelola Produk Saya</h2>
-        <a href="{{ route('penjual.produk.create') }}" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition">
-            + Tambah Produk
+{{-- Products Table --}}
+<div style="background:#fff; border:1px solid #E0E0E0; border-radius:10px; overflow:hidden;">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:1.1rem 1.5rem; border-bottom:1px solid #F0F0F0;">
+        <h2 style="font-size:.95rem; font-weight:700; color:#212121; margin:0;">Kelola Produk Saya</h2>
+        <a href="{{ route('penjual.produk.create') }}" style="background:#03AC0E; color:#fff; text-decoration:none; border-radius:8px; padding:.5rem 1rem; font-size:.8rem; font-weight:600; transition:background .15s; display:inline-flex; align-items:center; gap:.35rem;"
+            onmouseover="this.style.background='#028A0B'" onmouseout="this.style.background='#03AC0E'">
+            <span>+</span> Tambah Produk
         </a>
     </div>
 
     @if(session('success'))
-        <div class="mb-4 p-3 bg-green-50 text-green-700 rounded-lg">{{ session('success') }}</div>
+        <div style="margin:1rem 1.5rem; background:#F3FFED; border:1px solid #A8D5AB; color:#1B5E20; padding:.7rem 1rem; border-radius:8px; font-size:.83rem;">
+            ✓ {{ session('success') }}
+        </div>
     @endif
 
     @if(isset($products) && $products->count())
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50 border-b">
-                    <tr>
-                        <th class="px-4 py-3 text-left font-semibold text-gray-700">Nama Produk</th>
-                        <th class="px-4 py-3 text-left font-semibold text-gray-700">Harga</th>
-                        <th class="px-4 py-3 text-left font-semibold text-gray-700">Stok</th>
-                        <th class="px-4 py-3 text-left font-semibold text-gray-700">Status</th>
-                        <th class="px-4 py-3 text-left font-semibold text-gray-700">Aksi</th>
+        <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:.83rem;">
+                <thead>
+                    <tr style="background:#FAFAFA; border-bottom:1px solid #E0E0E0;">
+                        <th style="text-align:left; padding:.75rem 1.25rem; font-weight:600; color:#616161; font-size:.75rem; text-transform:uppercase; letter-spacing:.5px;">Nama Produk</th>
+                        <th style="text-align:left; padding:.75rem 1rem; font-weight:600; color:#616161; font-size:.75rem; text-transform:uppercase; letter-spacing:.5px;">Harga</th>
+                        <th style="text-align:left; padding:.75rem 1rem; font-weight:600; color:#616161; font-size:.75rem; text-transform:uppercase; letter-spacing:.5px;">Stok</th>
+                        <th style="text-align:left; padding:.75rem 1rem; font-weight:600; color:#616161; font-size:.75rem; text-transform:uppercase; letter-spacing:.5px;">Status</th>
+                        <th style="text-align:left; padding:.75rem 1rem; font-weight:600; color:#616161; font-size:.75rem; text-transform:uppercase; letter-spacing:.5px;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($products as $product)
-                    <tr class="border-b hover:bg-gray-50">
-                        <td class="px-4 py-3 text-gray-800 font-medium">{{ $product->name }}</td>
-                        <td class="px-4 py-3 text-gray-600">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
-                        <td class="px-4 py-3">
-                            <span class="px-3 py-1 rounded-full text-xs font-medium {{ $product->stock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                    <tr style="border-bottom:1px solid #F5F5F5; transition:background .1s;" onmouseover="this.style.background='#FAFAFA'" onmouseout="this.style.background='transparent'">
+                        <td style="padding:.85rem 1.25rem; color:#212121; font-weight:500;">{{ $product->name }}</td>
+                        <td style="padding:.85rem 1rem; color:#03AC0E; font-weight:600;">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
+                        <td style="padding:.85rem 1rem;">
+                            <span style="padding:.2rem .65rem; border-radius:999px; font-size:.72rem; font-weight:600; background:{{ $product->stock > 0 ? '#F3FFED' : '#FEF2F2' }}; color:{{ $product->stock > 0 ? '#03AC0E' : '#EF4444' }}; border:1px solid {{ $product->stock > 0 ? '#A8D5AB' : '#FECACA' }};">
                                 {{ $product->stock }}
                             </span>
                         </td>
-                        <td class="px-4 py-3">
-                            <div class="flex gap-2">
-                                <span class="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
-                                    {{ ucfirst($product->status) }}
-                                </span>
-                                <span class="px-3 py-1 rounded-full text-xs font-medium {{ $product->is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                        <td style="padding:.85rem 1rem;">
+                            <div style="display:flex; gap:.4rem; flex-wrap:wrap;">
+                                <span style="padding:.2rem .65rem; border-radius:999px; font-size:.72rem; font-weight:600; background:#EEF2FF; color:#4F46E5;">{{ ucfirst($product->status) }}</span>
+                                <span style="padding:.2rem .65rem; border-radius:999px; font-size:.72rem; font-weight:600; background:{{ $product->is_active ? '#F3FFED' : '#F5F5F5' }}; color:{{ $product->is_active ? '#03AC0E' : '#9E9E9E' }}; border:1px solid {{ $product->is_active ? '#A8D5AB' : '#E0E0E0' }};">
                                     {{ $product->is_active ? 'Aktif' : 'Non-Aktif' }}
                                 </span>
                             </div>
                         </td>
-                        <td class="px-4 py-3 flex gap-2">
-                            <a href="{{ route('penjual.produk.edit', $product) }}" class="px-3 py-1 text-sm bg-yellow-100 text-yellow-700 rounded-lg hover:bg-yellow-200 transition">Edit</a>
-                            <form action="{{ route('penjual.produk.toggle-active', $product) }}" method="post" class="inline">
-                                @csrf
-                                @method('PATCH')
-                                <button class="px-3 py-1 text-sm {{ $product->is_active ? 'bg-red-100 text-red-700 hover:bg-red-200' : 'bg-green-100 text-green-700 hover:bg-green-200' }} rounded-lg transition" onclick="return confirm('{{ $product->is_active ? 'Non-aktifkan' : 'Aktifkan' }} produk ini?')">
-                                    {{ $product->is_active ? 'Non-Aktif' : 'Aktif' }}
-                                </button>
-                            </form>
+                        <td style="padding:.85rem 1rem;">
+                            <div style="display:flex; gap:.4rem;">
+                                <a href="{{ route('penjual.produk.edit', $product) }}" style="padding:.3rem .75rem; font-size:.75rem; font-weight:600; background:#FFF8E1; color:#F59E0B; border-radius:6px; text-decoration:none; border:1px solid #FDE68A; transition:background .15s;"
+                                    onmouseover="this.style.background='#FEF3C7'" onmouseout="this.style.background='#FFF8E1'">Edit</a>
+                                <form action="{{ route('penjual.produk.toggle-active', $product) }}" method="post" style="display:inline;">
+                                    @csrf @method('PATCH')
+                                    <button type="submit" onclick="return confirm('{{ $product->is_active ? 'Non-aktifkan' : 'Aktifkan' }} produk ini?')"
+                                        style="padding:.3rem .75rem; font-size:.75rem; font-weight:600; border-radius:6px; cursor:pointer; border:1px solid; transition:background .15s; font-family:inherit;
+                                        {{ $product->is_active ? 'background:#FEF2F2; color:#EF4444; border-color:#FECACA;' : 'background:#F3FFED; color:#03AC0E; border-color:#A8D5AB;' }}">
+                                        {{ $product->is_active ? 'Non-Aktif' : 'Aktifkan' }}
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-
-        @if(isset($products) && method_exists($products, 'links'))
-            <div class="mt-4">
-                {{ $products->links() }}
-            </div>
+        @if(method_exists($products, 'links'))
+            <div style="padding:1rem 1.5rem; border-top:1px solid #F0F0F0;">{{ $products->links() }}</div>
         @endif
     @else
-        <div class="text-center py-12">
-            <p class="text-gray-500 text-lg mb-4">Tidak ada produk</p>
-            <a href="{{ route('penjual.produk.create') }}" class="inline-block bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium transition">
-                Buat Produk Pertama
-            </a>
+        <div style="text-align:center; padding:3rem; color:#9E9E9E;">
+            <p style="font-size:2rem; margin:0 0 .75rem;">📦</p>
+            <p style="font-size:.9rem; font-weight:600; color:#424242; margin:0 0 .4rem;">Belum ada produk</p>
+            <p style="font-size:.8rem; margin:0 0 1.25rem;">Mulai berjualan dengan menambahkan produk pertama Anda</p>
+            <a href="{{ route('penjual.produk.create') }}" style="background:#03AC0E; color:#fff; text-decoration:none; border-radius:8px; padding:.6rem 1.5rem; font-size:.85rem; font-weight:600; display:inline-block;">Buat Produk Pertama</a>
         </div>
     @endif
 </div>

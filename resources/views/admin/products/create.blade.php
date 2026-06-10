@@ -41,10 +41,12 @@
 
             <div>
                 <label class="block text-sm font-medium text-slate-700">Kondisi</label>
-                <select name="condition" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100">
+                <select name="condition" class="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100" required>
                     <option value="">Pilih kondisi</option>
-                    <option value="baru" {{ old('condition') == 'baru' ? 'selected' : '' }}>Baru</option>
-                    <option value="bekas" {{ old('condition') == 'bekas' ? 'selected' : '' }}>Bekas</option>
+                    <option value="Sangat Baik" {{ old('condition') == 'Sangat Baik' ? 'selected' : '' }}>Sangat Baik</option>
+                    <option value="Baik" {{ old('condition') == 'Baik' ? 'selected' : '' }}>Baik</option>
+                    <option value="Cukup" {{ old('condition') == 'Cukup' ? 'selected' : '' }}>Cukup</option>
+                    <option value="Rusak Ringan" {{ old('condition') == 'Rusak Ringan' ? 'selected' : '' }}>Rusak Ringan</option>
                 </select>
                 @error('condition')<p class="mt-2 text-sm text-red-600">{{ $message }}</p>@enderror
             </div>

@@ -30,7 +30,7 @@ return new class extends Migration
             $table->unsignedInteger('stock')->default(1);
 
             // kondisi barang
-            $table->enum('condition', ['baru', 'bekas']);
+            $table->string('condition');
 
             // status produk
             $table->enum('status', ['aktif', 'sold'])

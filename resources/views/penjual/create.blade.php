@@ -18,17 +18,17 @@
         </div>
     @endif
 
-    <form action="{{ route('penjual.produk.store') }}" method="post" enctype="multipart/form-data" class="bg-white rounded-2xl shadow p-6">
+    <form action="{{ route('penjual.produk.store') }}" method="post" enctype="multipart/form-data" class="glassmorphism rounded-3xl p-6 shadow-sm">
         @csrf
         
         <div class="mb-6">
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Nama Produk</label>
-            <input type="text" name="name" value="{{ old('name') }}" placeholder="Masukkan nama produk" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-400 outline-none">
+            <label class="block text-sm font-semibold text-emerald-950 mb-2">Nama Produk</label>
+            <input type="text" name="name" value="{{ old('name') }}" placeholder="Masukkan nama produk" class="w-full bg-emerald-50/70 border border-emerald-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none text-slate-800 placeholder-emerald-600/40">
         </div>
 
         <div class="mb-6">
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Kategori</label>
-            <select name="category_id" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-400 outline-none">
+            <label class="block text-sm font-semibold text-emerald-950 mb-2">Kategori</label>
+            <select name="category_id" class="w-full bg-emerald-50/70 border border-emerald-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none text-slate-850">
                 <option value="">Pilih kategori</option>
                 @foreach($categories as $category)
                     <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
@@ -37,39 +37,41 @@
         </div>
 
         <div class="mb-6">
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Deskripsi</label>
-            <textarea name="description" placeholder="Jelaskan produk Anda" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-400 outline-none" rows="4">{{ old('description') }}</textarea>
+            <label class="block text-sm font-semibold text-emerald-950 mb-2">Deskripsi</label>
+            <textarea name="description" placeholder="Jelaskan produk Anda" class="w-full bg-emerald-50/70 border border-emerald-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none text-slate-800 placeholder-emerald-600/40" rows="4">{{ old('description') }}</textarea>
         </div>
 
         <div class="grid grid-cols-2 gap-4 mb-6">
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Harga (Rp)</label>
-                <input type="number" step="0.01" name="price" value="{{ old('price') }}" placeholder="0" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-400 outline-none">
+                <label class="block text-sm font-semibold text-emerald-950 mb-2">Harga (Rp)</label>
+                <input type="number" step="0.01" name="price" value="{{ old('price') }}" placeholder="0" class="w-full bg-emerald-50/70 border border-emerald-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none text-slate-800 placeholder-emerald-600/40">
             </div>
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Stok</label>
-                <input type="number" name="stock" value="{{ old('stock', 1) }}" placeholder="1" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-400 outline-none">
+                <label class="block text-sm font-semibold text-emerald-950 mb-2">Stok</label>
+                <input type="number" name="stock" value="{{ old('stock', 1) }}" placeholder="1" class="w-full bg-emerald-50/70 border border-emerald-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none text-slate-800 placeholder-emerald-600/40">
             </div>
         </div>
 
         <div class="mb-6">
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Kondisi</label>
-            <select name="condition" class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-400 outline-none">
+            <label class="block text-sm font-semibold text-emerald-950 mb-2">Kondisi</label>
+            <select name="condition" class="w-full bg-emerald-50/70 border border-emerald-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none text-slate-850" required>
                 <option value="">Pilih kondisi</option>
-                <option value="baru" {{ old('condition') == 'baru' ? 'selected' : '' }}>Baru</option>
-                <option value="bekas" {{ old('condition') == 'bekas' ? 'selected' : '' }}>Bekas</option>
+                <option value="Sangat Baik" {{ old('condition') == 'Sangat Baik' ? 'selected' : '' }}>Sangat Baik</option>
+                <option value="Baik" {{ old('condition') == 'Baik' ? 'selected' : '' }}>Baik</option>
+                <option value="Cukup" {{ old('condition') == 'Cukup' ? 'selected' : '' }}>Cukup</option>
+                <option value="Rusak Ringan" {{ old('condition') == 'Rusak Ringan' ? 'selected' : '' }}>Rusak Ringan</option>
             </select>
         </div>
 
         <div class="mb-6">
-            <label class="block text-sm font-semibold text-gray-700 mb-2">Gambar Produk</label>
-            <input type="file" name="image" class="w-full border-2 border-dashed rounded-lg px-4 py-6 cursor-pointer hover:border-green-500" accept="image/*">
-            <p class="text-xs text-gray-500 mt-2">Format: JPG, JPEG, PNG, WEBP. Ukuran maks: 2MB</p>
+            <label class="block text-sm font-semibold text-emerald-950 mb-2">Gambar Produk</label>
+            <input type="file" name="image" class="w-full bg-emerald-50/40 border-2 border-dashed border-emerald-300 rounded-xl px-4 py-6 cursor-pointer hover:border-emerald-500" accept="image/*">
+            <p class="text-xs text-slate-500 mt-2">Format: JPG, JPEG, PNG, WEBP. Ukuran maks: 2MB</p>
         </div>
 
         <div class="flex gap-3">
-            <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium transition">Simpan Produk</button>
-            <a href="{{ route('penjual.produk.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2 rounded-lg font-medium transition">Batal</a>
+            <button type="submit" class="bg-[#064e3b] hover:bg-[#059669] text-white px-6 py-2.5 rounded-xl font-semibold transition">Simpan Produk</button>
+            <a href="{{ route('penjual.produk.index') }}" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 px-6 py-2.5 rounded-xl font-semibold transition border border-emerald-300">Batal</a>
         </div>
     </form>
 </div>

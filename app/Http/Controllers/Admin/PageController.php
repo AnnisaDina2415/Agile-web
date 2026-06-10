@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -24,33 +25,12 @@ class PageController extends Controller
             ->join('roles', 'set_roles.role_id', '=', 'roles.id')
             ->where('roles.role_name', 'admin')
             ->count();
+        $totalOrders = Order::count();
 
-        $pendingOrders = collect([
-            (object) [
-                'product_image' => null,
-                'product_name' => 'Sepeda Lipat',
-                'buyer_name' => 'Andi',
-                'created_at' => now()->subMinutes(5),
-                'total_price' => 850000,
-                'status' => 'Menunggu',
-            ],
-            (object) [
-                'product_image' => null,
-                'product_name' => 'Kulkas Mini',
-                'buyer_name' => 'Rina',
-                'created_at' => now()->subMinutes(18),
-                'total_price' => 180000,
-                'status' => 'Dikonfirmasi',
-            ],
-            (object) [
-                'product_image' => null,
-                'product_name' => 'Meja Belajar',
-                'buyer_name' => 'Budi',
-                'created_at' => now()->subHour(),
-                'total_price' => 325000,
-                'status' => 'Menunggu',
-            ],
-        ]);
+        $pendingOrders = Order::with(['items.product.primaryImage', 'user'])
+            ->latest()
+            ->take(5)
+            ->get();
 
         $recentUsers = User::latest()->take(4)->get();
 
@@ -61,14 +41,21 @@ class PageController extends Controller
             'activeUsers',
             'totalCategories',
             'totalAdmins',
+            'totalOrders',
             'pendingOrders',
             'recentUsers'
         ));
     }
 
-    public function products()
+    public function products(Request $request)
     {
-        $products = Product::with(['primaryImage', 'category'])->latest()->get();
+        $query = Product::with(['primaryImage', 'category']);
+        
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        $products = $query->latest()->get();
 
         return view('admin.products.index', compact('products'));
     }
@@ -87,7 +74,7 @@ class PageController extends Controller
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'condition' => 'required|in:baru,bekas',
+            'condition' => 'required|in:Sangat Baik,Baik,Cukup,Rusak Ringan',
             'description' => 'nullable|string',
         ]);
 
@@ -129,7 +116,7 @@ class PageController extends Controller
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'condition' => 'required|in:baru,bekas',
+            'condition' => 'required|in:Sangat Baik,Baik,Cukup,Rusak Ringan',
             'description' => 'nullable|string',
         ])->validate();
 
@@ -210,14 +197,14 @@ class PageController extends Controller
     public function orders()
     {
         $orders = collect([
-            ['id' => '#1023', 'buyer' => 'Andi', 'total' => 'Rp320.000', 'date' => 'Apr 28', 'status' => 'Menunggu', 'items' => [
+            ['id' => '1023', 'buyer' => 'Andi', 'total' => 'Rp320.000', 'date' => 'Apr 28', 'status' => 'Menunggu', 'items' => [
                 ['name' => 'Sepeda Lipat', 'qty' => 1, 'price' => 'Rp850.000'],
                 ['name' => 'Kunci Sepeda', 'qty' => 1, 'price' => 'Rp75.000'],
             ]],
-            ['id' => '#1024', 'buyer' => 'Rina', 'total' => 'Rp180.000', 'date' => 'Apr 29', 'status' => 'Dikonfirmasi', 'items' => [
+            ['id' => '1024', 'buyer' => 'Rina', 'total' => 'Rp180.000', 'date' => 'Apr 29', 'status' => 'Dikonfirmasi', 'items' => [
                 ['name' => 'Kulkas Mini', 'qty' => 1, 'price' => 'Rp180.000'],
             ]],
-            ['id' => '#1025', 'buyer' => 'Budi', 'total' => 'Rp540.000', 'date' => 'Apr 30', 'status' => 'Dikirim', 'items' => [
+            ['id' => '1025', 'buyer' => 'Budi', 'total' => 'Rp540.000', 'date' => 'Apr 30', 'status' => 'Dikirim', 'items' => [
                 ['name' => 'Meja Belajar', 'qty' => 1, 'price' => 'Rp325.000'],
                 ['name' => 'Lampu Meja', 'qty' => 1, 'price' => 'Rp95.000'],
             ]],
@@ -229,14 +216,14 @@ class PageController extends Controller
     public function showOrder($orderId)
     {
         $orders = collect([
-            ['id' => '#1023', 'buyer' => 'Andi', 'total' => 'Rp320.000', 'date' => 'Apr 28', 'status' => 'Menunggu', 'items' => [
+            ['id' => '1023', 'buyer' => 'Andi', 'total' => 'Rp320.000', 'date' => 'Apr 28', 'status' => 'Menunggu', 'items' => [
                 ['name' => 'Sepeda Lipat', 'qty' => 1, 'price' => 'Rp850.000'],
                 ['name' => 'Kunci Sepeda', 'qty' => 1, 'price' => 'Rp75.000'],
             ]],
-            ['id' => '#1024', 'buyer' => 'Rina', 'total' => 'Rp180.000', 'date' => 'Apr 29', 'status' => 'Dikonfirmasi', 'items' => [
+            ['id' => '1024', 'buyer' => 'Rina', 'total' => 'Rp180.000', 'date' => 'Apr 29', 'status' => 'Dikonfirmasi', 'items' => [
                 ['name' => 'Kulkas Mini', 'qty' => 1, 'price' => 'Rp180.000'],
             ]],
-            ['id' => '#1025', 'buyer' => 'Budi', 'total' => 'Rp540.000', 'date' => 'Apr 30', 'status' => 'Dikirim', 'items' => [
+            ['id' => '1025', 'buyer' => 'Budi', 'total' => 'Rp540.000', 'date' => 'Apr 30', 'status' => 'Dikirim', 'items' => [
                 ['name' => 'Meja Belajar', 'qty' => 1, 'price' => 'Rp325.000'],
                 ['name' => 'Lampu Meja', 'qty' => 1, 'price' => 'Rp95.000'],
             ]],

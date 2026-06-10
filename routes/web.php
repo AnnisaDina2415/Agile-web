@@ -10,6 +10,9 @@ use App\Http\Controllers\Pembeli\ProductController;
 use App\Http\Controllers\Pembeli\SellerController;
 use App\Http\Controllers\Pembeli\CartController;
 use App\Http\Controllers\Pembeli\ProfileController;
+use App\Http\Controllers\Pembeli\CheckoutController;
+use App\Http\Controllers\Pembeli\OrderController;
+use App\Http\Controllers\Api\MidtransCallbackController;
 use App\Http\Controllers\SellerApplicationController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -21,16 +24,22 @@ Route::get('/', function () {
 });
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+// Registration Routes
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+
+// Forgot Password Routes
+Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('password.email');
 
 // Admin Auth Routes
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AdminAuthController::class, 'login'])->name('login.post');
-    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+    Route::match(['get', 'post'], '/logout', [AdminAuthController::class, 'logout'])->name('logout');
 });
 
 // Pembeli Routes with Role Check
@@ -52,10 +61,9 @@ Route::middleware(['auth', 'role:pembeli'])->group(function () {
         Route::get('/unread-count', [ChatController::class, 'getUnreadCount'])->name('unread-count');
         Route::post('/start', [ChatController::class, 'startChat'])->name('start');
         Route::get('/', [ChatController::class, 'index'])->name('index');
-        Route::post('/start', [ChatController::class, 'startChat'])->name('start');
-        Route::get('/unread-count', [ChatController::class, 'getUnreadCount'])->name('unread-count');
         Route::get('/{conversation}', [ChatController::class, 'show'])->name('show');
         Route::post('/{conversation}/send', [ChatController::class, 'sendMessage'])->name('send');
+        Route::get('/{conversation}/poll', [ChatController::class, 'pollMessages'])->name('poll');
     });
 
     Route::prefix('pembeli/profile')->name('pembeli.profile.')->group(function () {
@@ -64,7 +72,16 @@ Route::middleware(['auth', 'role:pembeli'])->group(function () {
         Route::put('/', [ProfileController::class, 'update'])->name('update');
         Route::post('/upload-ktp', [ProfileController::class, 'uploadKTP'])->name('upload-ktp');
     });
+
+    // Checkout & Order Routes
+    Route::get('/pembeli/checkout', [CheckoutController::class, 'index'])->name('pembeli.checkout.index');
+    Route::post('/pembeli/checkout', [CheckoutController::class, 'store'])->name('pembeli.checkout.store');
+    Route::get('/pembeli/orders', [OrderController::class, 'index'])->name('pembeli.orders.index');
+    Route::get('/pembeli/orders/{order}', [OrderController::class, 'show'])->name('pembeli.orders.show');
 });
+
+// Midtrans webhook callback route (must be outside auth group)
+Route::post('/midtrans/callback', [MidtransCallbackController::class, 'handle'])->name('midtrans.callback');
 
 // Admin Routes
 Route::prefix('admin')->middleware('auth:admin')->name('admin.')->group(function () {
@@ -103,8 +120,6 @@ Route::prefix('admin')->middleware('auth:admin')->name('admin.')->group(function
     Route::get('/seller-applications', [SellerApplicationController::class, 'index'])->name('seller-applications.index');
     Route::patch('/seller-applications/{application}/approve', [SellerApplicationController::class, 'approve'])->name('seller-applications.approve');
     Route::post('/seller-applications/{application}/reject', [SellerApplicationController::class, 'reject'])->name('seller-applications.reject');
-
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
 // Penjual Routes with Role Check

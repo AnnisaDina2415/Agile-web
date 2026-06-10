@@ -33,7 +33,20 @@ class DashboardController extends Controller
             $query->where('price', '<=', $request->max_price);
         }
 
-        $products = $query->latest()->get();
+        // Sort by price or latest
+        if ($request->filled('sort')) {
+            if ($request->sort === 'price_asc') {
+                $query->orderBy('price', 'asc');
+            } elseif ($request->sort === 'price_desc') {
+                $query->orderBy('price', 'desc');
+            } else {
+                $query->latest();
+            }
+        } else {
+            $query->latest();
+        }
+
+        $products = $query->get();
         $categories = Category::all();
 
         return view('pembeli.dashboard', compact('products', 'categories'));

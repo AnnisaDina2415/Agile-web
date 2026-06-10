@@ -47,8 +47,17 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Hash password automatically when setting
+     */
+    public function setPasswordAttribute(string $value): void
+    {
+        $this->attributes['password'] = \Illuminate\Support\Facades\Hash::needsRehash($value)
+            ? \Illuminate\Support\Facades\Hash::make($value)
+            : $value;
     }
 
     /**

@@ -47,6 +47,21 @@
                 @enderror
             </div>
 
+            <div>
+                <label class="block text-gray-700 font-medium mb-2">Kata Sandi Baru (kosongkan jika tidak ingin diubah)</label>
+                <input type="password" name="password" placeholder="Minimal 6 karakter"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 @error('password') border-red-500 @enderror">
+                @error('password')
+                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-medium mb-2">Konfirmasi Kata Sandi Baru</label>
+                <input type="password" name="password_confirmation" placeholder="Ulangi kata sandi baru"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500">
+            </div>
+
             <div class="flex gap-4">
                 <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition">
                     Simpan Perubahan

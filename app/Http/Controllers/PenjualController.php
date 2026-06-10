@@ -63,7 +63,7 @@ class PenjualController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:1',
-            'condition' => 'required|in:baru,bekas',
+            'condition' => 'required|in:Sangat Baik,Baik,Cukup,Rusak Ringan',
             'category_id' => 'required|integer',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
@@ -122,7 +122,7 @@ class PenjualController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:1',
-            'condition' => 'required|in:baru,bekas',
+            'condition' => 'required|in:Sangat Baik,Baik,Cukup,Rusak Ringan',
             'category_id' => 'required|integer',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);

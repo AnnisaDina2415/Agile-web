@@ -15,10 +15,32 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
-            'name' => 'Annisa Admin',
-            'email' => 'annisa@gmail.com',
-            'password' => Hash::make('123'),
+            'name' => 'Pembeli Demo',
+            'email' => 'pembeli@gmail.com',
+            'password' => Hash::make('password123'),
             'phone' => '081234567890',
+            'address' => 'Indonesia',
+            'is_active' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('users')->insert([
+            'name' => 'Penjual Demo',
+            'email' => 'penjual@gmail.com',
+            'password' => Hash::make('password123'),
+            'phone' => '08123456789',
+            'address' => 'Indonesia',
+            'is_active' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('users')->insert([
+            'name' => 'Annisa',
+            'email' => 'annisa@gmail.com',
+            'password' => Hash::make('password123'),
+            'phone' => '08123456789',
             'address' => 'Indonesia',
             'is_active' => true,
             'created_at' => now(),
@@ -28,18 +50,7 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             'name' => 'Aidil',
             'email' => 'aidil@gmail.com',
-            'password' => Hash::make('aidil123'),
-            'phone' => '08123456789',
-            'address' => 'Indonesia',
-            'is_active' => true,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        DB::table('users')->insert([
-            'name' => 'Fikri',
-            'email' => 'fikri@gmail.com',
-            'password' => Hash::make('fikri123'),
+            'password' => Hash::make('password123'),
             'phone' => '08123456789',
             'address' => 'Indonesia',
             'is_active' => true,

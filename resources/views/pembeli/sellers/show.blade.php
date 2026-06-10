@@ -12,41 +12,47 @@
     </div>
 
     <!-- Seller Header -->
-    <div class="bg-white rounded-2xl shadow p-8 mb-8">
+    <div class="glassmorphism rounded-3xl shadow p-8 mb-8">
         <div class="flex items-center gap-6 mb-6">
-            <div class="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
+            <div class="w-20 h-20 bg-gradient-to-br from-emerald-800 to-emerald-500 rounded-full flex items-center justify-center shadow-md">
                 <span class="text-white font-bold text-3xl">{{ substr($seller->name, 0, 1) }}</span>
             </div>
             <div>
-                <h1 class="text-3xl font-bold text-gray-800">{{ $seller->name }}</h1>
-                <p class="text-gray-600">Penjual Terpercaya</p>
+                <h1 class="text-3xl font-bold text-emerald-950">{{ $seller->name }}</h1>
+                <p class="text-emerald-750 font-semibold text-sm">Penjual Terpercaya</p>
             </div>
         </div>
 
         <!-- Seller Stats -->
         <div class="grid grid-cols-4 gap-4">
-            <div class="bg-gray-50 p-4 rounded-lg">
-                <p class="text-gray-600 text-sm">Rating Toko</p>
+            <div class="bg-emerald-50/50 border border-emerald-300 p-4 rounded-xl">
+                <p class="text-slate-600 text-sm">Rating Toko</p>
                 <p class="text-2xl font-bold text-yellow-500 mt-1">4.5 ⭐</p>
             </div>
-            <div class="bg-gray-50 p-4 rounded-lg">
-                <p class="text-gray-600 text-sm">Produk Aktif</p>
-                <p class="text-2xl font-bold text-green-600 mt-1">{{ $products->total() }}</p>
+            <div class="bg-emerald-50/50 border border-emerald-300 p-4 rounded-xl">
+                <p class="text-slate-600 text-sm">Produk Aktif</p>
+                <p class="text-2xl font-bold text-emerald-800 mt-1">{{ $products->total() }}</p>
             </div>
-            <div class="bg-gray-50 p-4 rounded-lg">
-                <p class="text-gray-600 text-sm">Penjualan</p>
-                <p class="text-2xl font-bold text-blue-600 mt-1">156 terjual</p>
+            <div class="bg-emerald-50/50 border border-emerald-300 p-4 rounded-xl">
+                <p class="text-slate-600 text-sm">Penjualan</p>
+                <p class="text-2xl font-bold text-emerald-600 mt-1">156 terjual</p>
             </div>
-            <div class="bg-gray-50 p-4 rounded-lg">
-                <p class="text-gray-600 text-sm">Respon Chat</p>
+            <div class="bg-emerald-50/50 border border-emerald-300 p-4 rounded-xl">
+                <p class="text-slate-600 text-sm">Respon Chat</p>
                 <p class="text-2xl font-bold text-green-600 mt-1">Cepat</p>
             </div>
         </div>
 
         <!-- Contact Button -->
-        <button class="mt-6 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition">
-            Hubungi Penjual
-        </button>
+        @if(Auth::id() !== $seller->id)
+            <form action="{{ route('chat.start') }}" method="POST" class="inline-block mt-6">
+                @csrf
+                <input type="hidden" name="user_id" value="{{ $seller->id }}">
+                <button type="submit" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 px-6 rounded-xl shadow transition">
+                    💬 Hubungi Penjual
+                </button>
+            </form>
+        @endif
     </div>
 
     <!-- Products Section -->
@@ -56,49 +62,51 @@
         @if ($products->count() > 0)
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 @foreach ($products as $product)
-                    <div class="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden">
+                    <div class="glassmorphism rounded-3xl overflow-hidden card-hover-animation flex flex-col h-full shadow-sm">
                         @php
                             $image = $product->primaryImage;
                         @endphp
 
-                        <a href="{{ route('pembeli.products.show', $product->id) }}" class="block">
+                        <a href="{{ route('pembeli.products.show', $product->id) }}" class="block relative aspect-square overflow-hidden bg-slate-100">
                             <img 
-                                src="{{ $image ? asset('storage/' . $image->image_url) : asset('images/no-image.png') }}" 
-                                class="w-full h-40 object-cover hover:scale-105 transition"
+                                src="{{ $image ? (Str::startsWith($image->image_url, ['http://', 'https://']) ? $image->image_url : asset('storage/' . $image->image_url)) : asset('images/no-image.png') }}" 
+                                class="w-full h-full object-cover hover:scale-105 transition"
                                 alt="{{ $product->name }}"
                             >
                         </a>
 
-                        <div class="p-4">
-                            <a href="{{ route('pembeli.products.show', $product->id) }}" class="hover:text-green-600">
-                                <h3 class="font-semibold text-gray-800 line-clamp-2">
-                                    {{ $product->name }}
-                                </h3>
-                            </a>
+                        <div class="p-4 flex-1 flex flex-col justify-between">
+                            <div>
+                                <a href="{{ route('pembeli.products.show', $product->id) }}" class="hover:text-emerald-700">
+                                    <h3 class="font-semibold text-gray-800 line-clamp-2">
+                                        {{ $product->name }}
+                                    </h3>
+                                </a>
 
-                            <p class="text-green-600 font-bold mt-2">
-                                Rp {{ number_format($product->price, 0, ',', '.') }}
-                            </p>
+                                <p class="text-emerald-700 font-extrabold mt-2">
+                                    Rp {{ number_format($product->price, 0, ',', '.') }}
+                                </p>
 
-                            <div class="flex gap-2 mt-3">
-                                <span class="text-xs bg-gray-200 px-2 py-1 rounded-full">
-                                    {{ ucfirst($product->condition) }}
-                                </span>
-                                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                                    Stok: {{ $product->stock }}
-                                </span>
+                                <div class="flex gap-2 mt-3">
+                                    <span class="text-[10px] bg-slate-200 px-2 py-0.5 rounded-full uppercase font-bold text-slate-700">
+                                        {{ $product->condition }}
+                                    </span>
+                                    <span class="text-[10px] bg-emerald-100 text-emerald-850 px-2 py-0.5 rounded-full font-bold">
+                                        Stok: {{ $product->stock }}
+                                    </span>
+                                </div>
                             </div>
 
-                            <div class="flex gap-2 mt-3">
-                                <a href="{{ route('pembeli.products.show', $product->id) }}" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg text-center text-sm transition">
+                            <div class="flex gap-2 mt-4">
+                                <a href="{{ route('pembeli.products.show', $product->id) }}" class="flex-1 bg-emerald-50/50 hover:bg-emerald-700 hover:text-white text-emerald-700 border border-emerald-300 py-2 rounded-xl text-center text-sm font-semibold transition">
                                     Lihat
                                 </a>
                                 <form action="{{ route('pembeli.cart.add') }}" method="POST" class="flex-1">
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                                     <input type="hidden" name="quantity" value="1">
-                                    <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg text-sm transition">
-                                        🛒 Keranjang
+                                    <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white py-2 rounded-xl text-sm font-semibold transition">
+                                        🛒 +
                                     </button>
                                 </form>
                             </div>

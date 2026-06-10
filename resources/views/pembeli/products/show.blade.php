@@ -14,14 +14,14 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <!-- Left Column: Image Gallery -->
         <div class="md:col-span-2">
-            <div class="bg-white rounded-2xl shadow overflow-hidden">
+            <div class="glassmorphism rounded-3xl overflow-hidden shadow-sm">
                 <!-- Main Image Carousel -->
                 <div x-data="imageCarousel()" class="relative bg-gray-200">
                     <div class="w-full h-96 md:h-[500px] bg-gray-100 flex items-center justify-center overflow-hidden relative">
                         @if ($product->images && count($product->images) > 0)
-                            @foreach ($product->images as $index => $image)
+                             @foreach ($product->images as $index => $image)
                                 <img 
-                                    src="{{ asset('storage/' . $image->image_url) }}" 
+                                    src="{{ Str::startsWith($image->image_url, ['http://', 'https://']) ? $image->image_url : asset('storage/' . $image->image_url) }}" 
                                     alt="Product image {{ $index + 1 }}"
                                     class="w-full h-full object-cover transition-opacity duration-300"
                                     :class="currentIndex === {{ $index }} ? 'opacity-100' : 'opacity-0 absolute'"
@@ -72,11 +72,11 @@
                                     class="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition"
                                     :class="currentIndex === {{ $index }} ? 'border-green-500' : 'border-gray-300'"
                                 >
-                                    <img 
-                                        src="{{ asset('storage/' . $image->image_url) }}" 
+                                     <img 
+                                        src="{{ Str::startsWith($image->image_url, ['http://', 'https://']) ? $image->image_url : asset('storage/' . $image->image_url) }}" 
                                         alt="Thumbnail {{ $index + 1 }}"
                                         class="w-full h-full object-cover"
-                                    >
+                                     >
                                 </button>
                             @endforeach
                         </div>
@@ -85,7 +85,7 @@
             </div>
 
             <!-- Product Description -->
-            <div class="mt-8 bg-white rounded-2xl shadow p-6">
+            <div class="mt-8 glassmorphism rounded-3xl p-6 shadow-sm">
                 <h2 class="text-xl font-bold text-gray-800 mb-4">Deskripsi Produk</h2>
                 <p class="text-gray-700 leading-relaxed whitespace-pre-wrap">
                     {{ $product->description ?? 'Tidak ada deskripsi' }}
@@ -104,11 +104,11 @@
                                         @php
                                             $relatedImage = $related->primaryImage;
                                         @endphp
-                                        <img 
-                                            src="{{ $relatedImage ? asset('storage/' . $relatedImage->image_url) : asset('images/no-image.png') }}" 
-                                            alt="{{ $related->name }}"
-                                            class="w-full h-full object-cover group-hover:scale-105 transition"
-                                        >
+                                         <img 
+                                             src="{{ $relatedImage ? (Str::startsWith($relatedImage->image_url, ['http://', 'https://']) ? $relatedImage->image_url : asset('storage/' . $relatedImage->image_url)) : asset('images/no-image.png') }}" 
+                                             alt="{{ $related->name }}"
+                                             class="w-full h-full object-cover group-hover:scale-105 transition"
+                                         >
                                     </div>
                                     <div class="p-3">
                                         <h3 class="font-semibold text-sm text-gray-800 line-clamp-2">
@@ -129,14 +129,22 @@
         <!-- Right Column: Product Info & Actions -->
         <div>
             <!-- Basic Info -->
-            <div class="bg-white rounded-2xl shadow p-6 mb-6">
+            <div class="glassmorphism rounded-3xl p-6 mb-6 shadow-sm">
                 <h1 class="text-2xl font-bold text-gray-800 mb-4">{{ $product->name }}</h1>
 
                 <!-- Condition Badge -->
                 <div class="mb-4">
-                    <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold 
-                        {{ $product->condition === 'baru' ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800' }}">
-                        {{ ucfirst($product->condition) }}
+                    @php
+                        $conditionColors = [
+                            'Sangat Baik' => 'bg-emerald-100 text-emerald-800 border border-emerald-200',
+                            'Baik' => 'bg-teal-100 text-teal-850 border border-teal-200',
+                            'Cukup' => 'bg-amber-100 text-amber-850 border border-amber-200',
+                            'Rusak Ringan' => 'bg-rose-100 text-rose-850 border border-rose-200',
+                        ];
+                        $badgeStyle = $conditionColors[$product->condition] ?? 'bg-gray-100 text-gray-800 border border-gray-200';
+                    @endphp
+                    <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold {{ $badgeStyle }}">
+                        {{ $product->condition }}
                     </span>
                 </div>
 
@@ -199,46 +207,55 @@
 
                 <!-- Action Buttons -->
                 @if ($product->stock > 0)
-                    <div x-data="{ quantity: 1 }" class="space-y-3">
-                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
-                            <p class="text-gray-600 text-sm mb-2">Jumlah</p>
-                            <div class="flex items-center gap-3">
-                                <button type="button" @click="quantity > 1 && quantity--" class="bg-gray-300 hover:bg-gray-400 px-3 py-2 rounded font-bold">
-                                    −
-                                </button>
-                                <input 
-                                    type="number" 
-                                    x-model.number="quantity" 
-                                    min="1" 
-                                    max="{{ $product->stock }}"
-                                    class="w-16 text-center border border-gray-300 rounded px-2 py-2 font-semibold"
-                                >
-                                <button type="button" @click="quantity < {{ $product->stock }} && quantity++" class="bg-gray-300 hover:bg-gray-400 px-3 py-2 rounded font-bold">
-                                    +
-                                </button>
-                                <span class="ml-auto text-sm text-gray-600">Stok: {{ $product->stock }}</span>
+                    <div x-data="{ qty: 1 }" class="space-y-3">
+                        {{-- Quantity Selector --}}
+                        <div style="background:#F3FFED; border:1px solid #A8D5AB; border-radius:10px; padding:1rem; margin-bottom:.75rem;">
+                            <p style="font-size:.78rem; font-weight:600; color:#424242; margin:0 0 .6rem;">Jumlah</p>
+                            <div style="display:flex; align-items:center; gap:.75rem;">
+                                <button type="button" @click="qty > 1 && qty--"
+                                    style="width:36px; height:36px; border:1.5px solid #03AC0E; border-radius:8px; background:#fff; color:#03AC0E; font-size:1.2rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .15s;"
+                                    onmouseover="this.style.background='#F3FFED'" onmouseout="this.style.background='#fff'">−</button>
+                                <input type="number" x-model.number="qty"
+                                    min="1" max="{{ $product->stock }}"
+                                    style="width:54px; text-align:center; border:1.5px solid #E0E0E0; border-radius:8px; padding:.4rem; font-size:.95rem; font-weight:700; color:#212121; outline:none;"
+                                    onfocus="this.style.borderColor='#03AC0E'" onblur="this.style.borderColor='#E0E0E0'">
+                                <button type="button" @click="qty < {{ $product->stock }} && qty++"
+                                    style="width:36px; height:36px; border:1.5px solid #03AC0E; border-radius:8px; background:#fff; color:#03AC0E; font-size:1.2rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .15s;"
+                                    onmouseover="this.style.background='#F3FFED'" onmouseout="this.style.background='#fff'">+</button>
+                                <span style="margin-left:auto; font-size:.78rem; color:#9E9E9E;">Stok: <strong style="color:#212121;">{{ $product->stock }}</strong></span>
                             </div>
                         </div>
 
-                        <button onclick="document.getElementById('buyForm').submit()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg transition mb-3">
-                            Beli Sekarang
-                        </button>
-
-                        <form action="{{ route('pembeli.cart.add') }}" method="POST" class="w-full">
+                        {{-- BELI SEKARANG --}}
+                        <form action="{{ route('pembeli.cart.add') }}" method="POST" id="buyNowForm">
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            <input type="hidden" name="quantity" x-model.number="quantity">
-                            <button type="submit" class="w-full border-2 border-green-500 text-green-500 hover:bg-green-50 font-bold py-3 rounded-lg transition">
+                            <input type="hidden" name="buy_now" value="1">
+                            <input type="hidden" name="quantity" id="buyNowQty" value="1">
+                            <button type="submit"
+                                style="width:100%; background:#03AC0E; color:#fff; border:none; border-radius:10px; padding:.85rem; font-size:.95rem; font-weight:700; cursor:pointer; font-family:inherit; transition:background .15s; margin-bottom:.5rem;"
+                                onmouseover="this.style.background='#028A0F'" onmouseout="this.style.background='#03AC0E'"
+                                @click.prevent="document.getElementById('buyNowQty').value = qty; document.getElementById('buyNowForm').submit();">
+                                ⚡ Beli Sekarang
+                            </button>
+                        </form>
+
+                        {{-- KERANJANG --}}
+                        <form action="{{ route('pembeli.cart.add') }}" method="POST" id="addCartForm">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <input type="hidden" name="quantity" id="addCartQty" value="1">
+                            <button type="submit"
+                                style="width:100%; background:#fff; color:#03AC0E; border:1.5px solid #03AC0E; border-radius:10px; padding:.8rem; font-size:.95rem; font-weight:700; cursor:pointer; font-family:inherit; transition:all .15s;"
+                                onmouseover="this.style.background='#F3FFED'" onmouseout="this.style.background='#fff'"
+                                @click.prevent="document.getElementById('addCartQty').value = qty; document.getElementById('addCartForm').submit();">
                                 🛒 Masukkan Keranjang
                             </button>
                         </form>
                     </div>
-
-                    <form id="buyForm" action="" method="POST" style="display:none;">
-                        @csrf
-                    </form>
                 @else
-                    <button disabled class="w-full bg-gray-300 text-gray-600 font-bold py-3 rounded-lg cursor-not-allowed">
+                    <button disabled
+                        style="width:100%; background:#F5F5F5; color:#9E9E9E; border:1px solid #E0E0E0; border-radius:10px; padding:.85rem; font-size:.95rem; font-weight:700; cursor:not-allowed;">
                         Stok Habis
                     </button>
                 @endif
@@ -246,7 +263,7 @@
 
             <!-- Seller Stats & Chat Container -->
             <div x-data="chatComponent()">
-                <div class="bg-white rounded-2xl shadow p-6">
+                <div class="glassmorphism rounded-3xl p-6 shadow-sm">
                     <h3 class="text-lg font-bold text-gray-800 mb-4">Info Penjual</h3>
                     <div class="space-y-4 mb-4 pb-4 border-b border-gray-200">
                         <div class="flex justify-between">
@@ -266,10 +283,10 @@
                             <span class="font-bold text-green-600">Cepat</span>
                         </div>
                     </div>
-                    <a href="{{ route('pembeli.sellers.show', $product->user->id) }}" class="w-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 font-bold py-2 rounded-lg transition block text-center mb-2">
+                    <a href="{{ route('pembeli.sellers.show', $product->user->id) }}" class="w-full border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 font-bold py-2 rounded-lg transition block text-center mb-2">
                         👤 Lihat Toko Penjual
                     </a>
-                    <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-lg transition"
+                    <button class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-lg transition"
                         @click="openChat = true; initChat()">
                         💬 Hubungi Penjual
                     </button>
@@ -278,24 +295,25 @@
                 <!-- Real-time Chat Modal -->
                 <div x-show="openChat" 
                      x-transition
+                     x-cloak
                      class="fixed inset-0 bg-black bg-opacity-50 flex items-end md:items-center justify-center md:justify-center p-4 z-50"
-                     @click.self="openChat = false">
+                     @click.self="closeChat()">
                 
                 <div class="bg-white rounded-2xl shadow-2xl w-full md:w-96 max-h-screen md:max-h-96 flex flex-col"
                      @click.stop>
                     
                     <!-- Chat Header -->
-                    <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-t-2xl flex items-center justify-between">
+                    <div class="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white p-4 rounded-t-2xl flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
                                 <span class="font-bold">{{ substr($product->user->name, 0, 1) }}</span>
                             </div>
                             <div>
                                 <p class="font-semibold">{{ $product->user->name }}</p>
-                                <p class="text-xs text-blue-100">Online</p>
+                                <p class="text-xs text-emerald-100">Online</p>
                             </div>
                         </div>
-                        <button @click="openChat = false" class="text-white hover:bg-white/20 p-2 rounded-lg">
+                        <button @click="closeChat()" class="text-white hover:bg-white/20 p-2 rounded-lg">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
@@ -317,12 +335,12 @@
                                 x-model="newMessage"
                                 @keyup.enter="sendChatMessage()"
                                 placeholder="Ketik pesan..."
-                                class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+                                class="flex-1 border border-emerald-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500 bg-emerald-50/55"
                             >
                             <button 
                                 @click="sendChatMessage()"
                                 :disabled="!newMessage.trim()"
-                                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition"
+                                class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition"
                             >
                                 <span x-show="!isLoading">Kirim</span>
                                 <span x-show="isLoading">Mengirim...</span>
@@ -336,7 +354,7 @@
 </div>
 
     <!-- Reviews Section -->
-    <div class="mt-12 bg-white rounded-2xl shadow p-8 w-full">
+    <div class="mt-12 glassmorphism rounded-3xl p-8 w-full shadow-sm">
         <h2 class="text-2xl font-bold text-gray-800 mb-6">Ulasan Pembeli</h2>
 
         @php
@@ -372,7 +390,7 @@
             @foreach ($reviews as $review)
                 <div class="pb-6 border-b border-gray-200 last:border-0">
                     <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <div class="w-12 h-12 bg-gradient-to-br from-emerald-550 to-emerald-700 rounded-full flex items-center justify-center flex-shrink-0">
                             <span class="text-white font-bold">{{ $review['avatar'] }}</span>
                         </div>
                         <div class="flex-1">
@@ -433,6 +451,7 @@
             isLoading: false,
             conversationId: null,
             channel: null,
+            pollInterval: null,
             
             async initChat() {
                 // Start or get conversation
@@ -441,6 +460,7 @@
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
+                            'Accept': 'application/json',
                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
                         },
                         body: JSON.stringify({
@@ -455,6 +475,11 @@
                         console.log('Chat opened with conversation ID:', this.conversationId);
                         this.loadMessages();
                         this.subscribeToChannel();
+                        
+                        if (this.pollInterval) clearInterval(this.pollInterval);
+                        this.pollInterval = setInterval(() => {
+                            this.loadMessages();
+                        }, 2000);
                     } else {
                         console.error('Error starting chat:', response.status);
                     }
@@ -463,24 +488,26 @@
                 }
             },
 
+            closeChat() {
+                this.openChat = false;
+                if (this.pollInterval) {
+                    clearInterval(this.pollInterval);
+                    this.pollInterval = null;
+                }
+            },
+
             loadMessages() {
-                // Fetch existing messages
                 if (!this.conversationId) return;
                 
-                fetch(`/chat/${this.conversationId}`)
-                    .then(res => res.text())
-                    .then(html => {
-                        // Extract messages from the response
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, 'text/html');
-                        const messageElements = doc.querySelectorAll('[data-message-id]');
-                        
-                        this.messages = Array.from(messageElements).map(el => ({
-                            id: el.dataset.messageId,
-                            message: el.dataset.message,
-                            sender_name: el.dataset.senderName,
-                            sender_id: el.dataset.senderId,
-                            created_at: el.dataset.createdAt,
+                fetch(`/chat/${this.conversationId}/poll`)
+                    .then(res => res.json())
+                    .then(data => {
+                        this.messages = data.messages.map(m => ({
+                            id: m.id,
+                            message: m.message,
+                            sender_name: m.sender.name,
+                            sender_id: m.sender.id,
+                            created_at: m.created_at,
                         }));
                         
                         this.displayMessages();
@@ -519,13 +546,16 @@
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
+                                'Accept': 'application/json',
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
                             },
                             body: JSON.stringify({ message })
                         }
                     );
 
-                    if (!response.ok) {
+                    if (response.ok) {
+                        this.loadMessages();
+                    } else {
                         this.newMessage = message; // Restore message on error
                         console.error('Error sending message');
                     }
@@ -554,7 +584,7 @@
 
                 chatContainer.innerHTML = this.messages.map(msg => `
                     <div class="mb-4 flex ${msg.sender_id == currentUser ? 'justify-end' : 'justify-start'}">
-                        <div class="${msg.sender_id == currentUser ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'} rounded-lg px-4 py-2 max-w-xs">
+                        <div class="${msg.sender_id == currentUser ? 'bg-emerald-600 text-white' : 'bg-emerald-100 text-emerald-900'} rounded-lg px-4 py-2 max-w-xs border border-emerald-200">
                             <p>${msg.message}</p>
                             <p class="text-xs mt-1 opacity-70">${new Date(msg.created_at).toLocaleTimeString('id-ID')}</p>
                         </div>

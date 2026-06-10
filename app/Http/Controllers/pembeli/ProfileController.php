@@ -40,9 +40,23 @@ class ProfileController extends Controller
             'email' => 'required|email|unique:users,email,' . Auth::id(),
             'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',
+            'password' => 'nullable|string|min:6|confirmed',
         ]);
 
-        Auth::user()->update($validated);
+        $user = Auth::user();
+        
+        $data = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'address' => $validated['address'],
+        ];
+
+        if (!empty($validated['password'])) {
+            $data['password'] = \Illuminate\Support\Facades\Hash::make($validated['password']);
+        }
+
+        $user->update($data);
 
         return redirect()->route('pembeli.profile.show')->with('success', 'Profil berhasil diperbarui');
     }

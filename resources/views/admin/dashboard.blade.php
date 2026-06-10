@@ -1,245 +1,126 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Ringkasan')
-@section('page-title', 'Ringkasan Admin')
+@section('title', 'Dashboard Admin')
+@section('page-title', 'Dashboard')
 
 @section('content')
 
 {{-- Stat Cards --}}
-<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+<div style="display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1.5rem;">
 
     {{-- Total Barang --}}
-    <div class="bg-white rounded-2xl border border-slate-100 p-5">
-        <div class="flex items-start justify-between mb-4">
-            <div class="w-10 h-10 rounded-xl bg-brand-100 flex items-center justify-center">
-                <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div style="background:#fff; border:1px solid #E0E0E0; border-radius:10px; padding:1.1rem 1.25rem;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:.75rem;">
+            <div style="width:38px; height:38px; background:#F3FFED; border-radius:9px; display:flex; align-items:center; justify-content:center;">
+                <svg style="width:18px; height:18px; color:#03AC0E;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                 </svg>
             </div>
-            <span class="text-xs font-500 text-brand-600 bg-brand-50 px-2 py-0.5 rounded-full" style="font-weight:500">+12 minggu ini</span>
+            <span style="font-size:.68rem; font-weight:600; color:#03AC0E; background:#F3FFED; border:1px solid #A8D5AB; padding:.15rem .55rem; border-radius:999px;">Barang</span>
         </div>
-        <p class="text-2xl font-700 text-slate-800 mb-0.5" style="font-weight:700">{{ $totalProducts ?? 142 }}</p>
-        <p class="text-sm text-slate-400">Total Barang Listing</p>
+        <p style="font-size:1.6rem; font-weight:800; color:#212121; margin:0 0 .2rem; line-height:1;">{{ $totalProducts ?? 0 }}</p>
+        <p style="font-size:.75rem; color:#9E9E9E; margin:0;">Total Barang Listing</p>
     </div>
 
-    {{-- Pesanan Baru --}}
-    <div class="bg-white rounded-2xl border border-slate-100 p-5">
-        <div class="flex items-start justify-between mb-4">
-            <div class="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center">
-                <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    {{-- Total Pesanan --}}
+    <div style="background:#fff; border:1px solid #E0E0E0; border-radius:10px; padding:1.1rem 1.25rem;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:.75rem;">
+            <div style="width:38px; height:38px; background:#FFF3E0; border-radius:9px; display:flex; align-items:center; justify-content:center;">
+                <svg style="width:18px; height:18px; color:#FF6224;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                 </svg>
             </div>
-            <span class="text-xs font-500 text-orange-500 bg-orange-50 px-2 py-0.5 rounded-full" style="font-weight:500">3 menunggu</span>
+            <span style="font-size:.68rem; font-weight:600; color:#FF6224; background:#FFF3E0; border:1px solid #FFCCBC; padding:.15rem .55rem; border-radius:999px;">Pesanan</span>
         </div>
-        <p class="text-2xl font-700 text-slate-800 mb-0.5" style="font-weight:700">{{ $totalOrders ?? 38 }}</p>
-        <p class="text-sm text-slate-400">Total Pesanan</p>
+        <p style="font-size:1.6rem; font-weight:800; color:#212121; margin:0 0 .2rem; line-height:1;">{{ $totalOrders ?? 0 }}</p>
+        <p style="font-size:.75rem; color:#9E9E9E; margin:0;">Total Pesanan</p>
     </div>
 
     {{-- Total Pengguna --}}
-    <div class="bg-white rounded-2xl border border-slate-100 p-5">
-        <div class="flex items-start justify-between mb-4">
-            <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div style="background:#fff; border:1px solid #E0E0E0; border-radius:10px; padding:1.1rem 1.25rem;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:.75rem;">
+            <div style="width:38px; height:38px; background:#EEF2FF; border-radius:9px; display:flex; align-items:center; justify-content:center;">
+                <svg style="width:18px; height:18px; color:#4F46E5;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
                 </svg>
             </div>
-            <span class="text-xs font-500 text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full" style="font-weight:500">{{ $activeUsers ?? 3 }} aktif</span>
+            <span style="font-size:.68rem; font-weight:600; color:#4F46E5; background:#EEF2FF; border:1px solid #C7D2FE; padding:.15rem .55rem; border-radius:999px;">{{ $activeUsers ?? 0 }} aktif</span>
         </div>
-        <p class="text-2xl font-700 text-slate-800 mb-0.5" style="font-weight:700">{{ $totalUsers ?? 4 }}</p>
-        <p class="text-sm text-slate-400">Total Pengguna</p>
+        <p style="font-size:1.6rem; font-weight:800; color:#212121; margin:0 0 .2rem; line-height:1;">{{ $totalUsers ?? 0 }}</p>
+        <p style="font-size:.75rem; color:#9E9E9E; margin:0;">Total Pengguna</p>
     </div>
 
     {{-- Total Admin --}}
-    <div class="bg-white rounded-2xl border border-slate-100 p-5">
-        <div class="flex items-start justify-between mb-4">
-            <div class="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center">
-                <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div style="background:#fff; border:1px solid #E0E0E0; border-radius:10px; padding:1.1rem 1.25rem;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:.75rem;">
+            <div style="width:38px; height:38px; background:#F5F3FF; border-radius:9px; display:flex; align-items:center; justify-content:center;">
+                <svg style="width:18px; height:18px; color:#7C3AED;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                 </svg>
             </div>
-            <span class="text-xs font-500 text-purple-500 bg-purple-50 px-2 py-0.5 rounded-full" style="font-weight:500">Semua aktif</span>
+            <span style="font-size:.68rem; font-weight:600; color:#7C3AED; background:#F5F3FF; border:1px solid #DDD6FE; padding:.15rem .55rem; border-radius:999px;">Semua aktif</span>
         </div>
-        <p class="text-2xl font-700 text-slate-800 mb-0.5" style="font-weight:700">{{ $totalAdmins ?? 2 }}</p>
-        <p class="text-sm text-slate-400">Total Admin</p>
+        <p style="font-size:1.6rem; font-weight:800; color:#212121; margin:0 0 .2rem; line-height:1;">{{ $totalAdmins ?? 0 }}</p>
+        <p style="font-size:.75rem; color:#9E9E9E; margin:0;">Total Admin</p>
     </div>
 </div>
 
-{{-- Middle Row --}}
-<div class="grid grid-cols-1 xl:grid-cols-3 gap-4 mb-6">
+{{-- Main row --}}
+<div style="display:grid; grid-template-columns:2fr 1fr; gap:1rem;">
 
-    {{-- Pesanan Menunggu --}}
-    <div class="xl:col-span-2 bg-white rounded-2xl border border-slate-100">
-        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-            <h2 class="text-sm font-600 text-slate-700" style="font-weight:600">Pesanan Perlu Diproses</h2>
-            <a href="{{ route('admin.orders.index') }}" class="text-xs text-brand-600 hover:text-brand-700 font-500" style="font-weight:500">Lihat semua →</a>
+    {{-- Pesanan Terbaru --}}
+    <div style="background:#fff; border:1px solid #E0E0E0; border-radius:10px; overflow:hidden;">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:1rem 1.25rem; border-bottom:1px solid #F0F0F0;">
+            <h2 style="font-size:.88rem; font-weight:700; color:#212121; margin:0;">Pesanan Perlu Diproses</h2>
+            <a href="{{ route('admin.orders.index') }}" style="font-size:.75rem; color:#03AC0E; font-weight:600; text-decoration:none;">Lihat semua →</a>
         </div>
-        <div class="divide-y divide-slate-50">
-            @forelse($pendingOrders ?? [] as $order)
-            <div class="flex items-center gap-4 px-6 py-3.5 hover:bg-slate-50 transition-colors">
-                <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                    @if($order->product_image)
-                        <img src="{{ Storage::url($order->product_image) }}" class="w-full h-full object-cover">
-                    @else
-                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                        </svg>
-                    @endif
-                </div>
-                <div class="flex-1 min-w-0">
-                    <p class="text-sm font-500 text-slate-700 truncate" style="font-weight:500">{{ $order->product_name }}</p>
-                    <p class="text-xs text-slate-400">{{ $order->buyer_name }} · {{ $order->created_at->diffForHumans() }}</p>
-                </div>
-                <div class="text-right flex-shrink-0">
-                    <p class="text-sm font-600 text-slate-800" style="font-weight:600">Rp{{ number_format($order->total_price, 0, ',', '.') }}</p>
-                    <span class="text-[10px] font-500 px-2 py-0.5 rounded-full bg-yellow-50 text-yellow-600" style="font-weight:500">Menunggu</span>
-                </div>
+        @forelse($pendingOrders ?? [] as $order)
+        <div style="display:flex; align-items:center; gap:.85rem; padding:.85rem 1.25rem; border-bottom:1px solid #F5F5F5; transition:background .1s;" onmouseover="this.style.background='#FAFAFA'" onmouseout="this.style.background='transparent'">
+            <div style="width:36px; height:36px; background:#F5F5F5; border-radius:8px; overflow:hidden; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+                @php $img = $order->items->first()?->product?->primaryImage; @endphp
+                @if($img)
+                    <img src="{{ Str::startsWith($img->image_url, ['http','https']) ? $img->image_url : asset('storage/'.$img->image_url) }}" style="width:100%; height:100%; object-fit:cover;">
+                @else
+                    <svg style="width:16px; height:16px; color:#BDBDBD;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                @endif
             </div>
-            @empty
-            {{-- Demo data --}}
-            @foreach([
-                ['name'=>'Magic Com Miyako 1.8L','buyer'=>'Alice Buyer','price'=>'125.000','time'=>'5 menit lalu','status'=>'Menunggu','color'=>'yellow'],
-                ['name'=>'Setrika Philips GC1010','buyer'=>'Bob Seller','price'=>'80.000','time'=>'12 menit lalu','status'=>'Dikonfirmasi','color'=>'blue'],
-                ['name'=>'Kipas Angin Cosmos 16"','buyer'=>'Diana Merchant','price'=>'145.000','time'=>'1 jam lalu','status'=>'Menunggu','color'=>'yellow'],
-                ['name'=>'Dispenser Sanken S-888','buyer'=>'Charlie User','price'=>'210.000','time'=>'2 jam lalu','status'=>'Dikirim','color'=>'green'],
-            ] as $order)
-            <div class="flex items-center gap-4 px-6 py-3.5 hover:bg-slate-50 transition-colors">
-                <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                    </svg>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <p class="text-sm font-500 text-slate-700 truncate" style="font-weight:500">{{ $order['name'] }}</p>
-                    <p class="text-xs text-slate-400">{{ $order['buyer'] }} · {{ $order['time'] }}</p>
-                </div>
-                <div class="text-right flex-shrink-0">
-                    <p class="text-sm font-600 text-slate-800" style="font-weight:600">Rp{{ $order['price'] }}</p>
-                    @if($order['color'] === 'yellow')
-                        <span class="text-[10px] font-500 px-2 py-0.5 rounded-full bg-yellow-50 text-yellow-600" style="font-weight:500">{{ $order['status'] }}</span>
-                    @elseif($order['color'] === 'blue')
-                        <span class="text-[10px] font-500 px-2 py-0.5 rounded-full bg-blue-50 text-blue-600" style="font-weight:500">{{ $order['status'] }}</span>
-                    @else
-                        <span class="text-[10px] font-500 px-2 py-0.5 rounded-full bg-green-50 text-green-600" style="font-weight:500">{{ $order['status'] }}</span>
-                    @endif
-                </div>
+            <div style="flex:1; min-width:0;">
+                <p style="font-size:.8rem; font-weight:600; color:#212121; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">#{{ $order->id }} — {{ $order->user->name ?? '-' }}</p>
+                <p style="font-size:.72rem; color:#9E9E9E; margin:.15rem 0 0;">{{ $order->created_at->diffForHumans() }} · {{ $order->items->count() }} item</p>
             </div>
-            @endforeach
-            @endforelse
+            <div style="text-align:right; flex-shrink:0;">
+                <p style="font-size:.8rem; font-weight:700; color:#03AC0E; margin:0;">Rp {{ number_format($order->total_price, 0, ',', '.') }}</p>
+                <span style="font-size:.65rem; font-weight:600; background:#FFF3E0; color:#FF6224; border:1px solid #FFCCBC; padding:.1rem .5rem; border-radius:999px; margin-top:.2rem; display:inline-block;">{{ ucfirst($order->status) }}</span>
+            </div>
         </div>
+        @empty
+        <div style="padding:2.5rem; text-align:center; color:#9E9E9E; font-size:.83rem;">Tidak ada pesanan menunggu 🎉</div>
+        @endforelse
     </div>
 
-    {{-- Kategori Populer --}}
-    <div class="bg-white rounded-2xl border border-slate-100">
-        <div class="px-6 py-4 border-b border-slate-100">
-            <h2 class="text-sm font-600 text-slate-700" style="font-weight:600">Kategori Terlaris</h2>
+    {{-- Quick Actions --}}
+    <div style="background:#fff; border:1px solid #E0E0E0; border-radius:10px; overflow:hidden;">
+        <div style="padding:1rem 1.25rem; border-bottom:1px solid #F0F0F0;">
+            <h2 style="font-size:.88rem; font-weight:700; color:#212121; margin:0;">Menu Cepat</h2>
         </div>
-        <div class="px-6 py-4 space-y-3">
-            @foreach([
-                ['label'=>'Peralatan Dapur','count'=>48,'pct'=>72,'color'=>'bg-brand-500'],
-                ['label'=>'Elektronik Kamar','count'=>31,'pct'=>47,'color'=>'bg-blue-400'],
-                ['label'=>'Furnitur Kecil','count'=>24,'pct'=>36,'color'=>'bg-purple-400'],
-                ['label'=>'Alat Kebersihan','count'=>18,'pct'=>27,'color'=>'bg-orange-400'],
-                ['label'=>'Buku & ATK','count'=>9,'pct'=>13,'color'=>'bg-pink-400'],
-            ] as $cat)
-            <div>
-                <div class="flex items-center justify-between mb-1.5">
-                    <span class="text-xs font-500 text-slate-600" style="font-weight:500">{{ $cat['label'] }}</span>
-                    <span class="text-xs text-slate-400">{{ $cat['count'] }} barang</span>
-                </div>
-                <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                    <div class="{{ $cat['color'] }} h-full rounded-full" style="width: {{ $cat['pct'] }}%"></div>
-                </div>
-            </div>
+        <div style="padding:.75rem;">
+            @php
+            $quickLinks = [
+                ['href' => route('admin.users.index'),           'icon' => '👥', 'label' => 'Kelola Pengguna',      'color' => '#EEF2FF', 'text' => '#4F46E5'],
+                ['href' => route('admin.seller-applications.index'), 'icon' => '🏪', 'label' => 'Pengajuan Penjual', 'color' => '#FFF3E0', 'text' => '#FF6224'],
+                ['href' => route('admin.categories.index'),      'icon' => '🏷️', 'label' => 'Kelola Kategori',     'color' => '#F3FFED', 'text' => '#03AC0E'],
+                ['href' => route('admin.orders.index'),          'icon' => '📦', 'label' => 'History Transaksi',   'color' => '#F5F3FF', 'text' => '#7C3AED'],
+                ['href' => route('admin.admins.index'),          'icon' => '🔑', 'label' => 'Kelola Admin',        'color' => '#FEF2F2', 'text' => '#EF4444'],
+            ];
+            @endphp
+            @foreach($quickLinks as $link)
+            <a href="{{ $link['href'] }}" style="display:flex; align-items:center; gap:.75rem; padding:.65rem .85rem; text-decoration:none; border-radius:8px; margin-bottom:.3rem; transition:background .15s;"
+               onmouseover="this.style.background='#F5F5F5'" onmouseout="this.style.background='transparent'">
+                <span style="width:32px; height:32px; background:{{ $link['color'] }}; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:.95rem; flex-shrink:0;">{{ $link['icon'] }}</span>
+                <span style="font-size:.82rem; font-weight:500; color:#212121;">{{ $link['label'] }}</span>
+                <svg style="width:12px; height:12px; color:#BDBDBD; margin-left:auto;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
             @endforeach
-        </div>
-    </div>
-</div>
-
-{{-- Bottom Row --}}
-<div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
-
-    {{-- Pengguna Terbaru --}}
-    <div class="bg-white rounded-2xl border border-slate-100">
-        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-            <h2 class="text-sm font-600 text-slate-700" style="font-weight:600">Pengguna Terbaru</h2>
-            <a href="{{ route('admin.users.index') }}" class="text-xs text-brand-600 hover:text-brand-700 font-500" style="font-weight:500">Kelola →</a>
-        </div>
-        <div class="divide-y divide-slate-50">
-            @forelse($recentUsers ?? [] as $user)
-            <div class="flex items-center gap-3 px-6 py-3 hover:bg-slate-50 transition-colors">
-                <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs font-600 text-slate-500 flex-shrink-0" style="font-weight:600">
-                    {{ strtoupper(substr($user->name, 0, 2)) }}
-                </div>
-                <div class="flex-1 min-w-0">
-                    <p class="text-sm font-500 text-slate-700 truncate" style="font-weight:500">{{ $user->name }}</p>
-                    <p class="text-xs text-slate-400 truncate">{{ $user->email }}</p>
-                </div>
-                <span class="text-[10px] font-500 px-2.5 py-0.5 rounded-full flex-shrink-0 {{ $user->is_active ? 'bg-green-50 text-green-600' : 'bg-slate-100 text-slate-400' }}" style="font-weight:500">
-                    {{ $user->is_active ? 'aktif' : 'nonaktif' }}
-                </span>
-            </div>
-            @empty
-            @foreach([
-                ['name'=>'Alice Buyer','email'=>'alice@example.com','active'=>true,'initials'=>'AB'],
-                ['name'=>'Bob Seller','email'=>'bob@example.com','active'=>true,'initials'=>'BS'],
-                ['name'=>'Charlie User','email'=>'charlie@example.com','active'=>false,'initials'=>'CU'],
-                ['name'=>'Diana Merchant','email'=>'diana@example.com','active'=>true,'initials'=>'DM'],
-            ] as $user)
-            <div class="flex items-center gap-3 px-6 py-3 hover:bg-slate-50 transition-colors">
-                <div class="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-xs font-600 text-brand-700 flex-shrink-0" style="font-weight:600">
-                    {{ $user['initials'] }}
-                </div>
-                <div class="flex-1 min-w-0">
-                    <p class="text-sm font-500 text-slate-700" style="font-weight:500">{{ $user['name'] }}</p>
-                    <p class="text-xs text-slate-400">{{ $user['email'] }}</p>
-                </div>
-                <span class="text-[10px] font-500 px-2.5 py-0.5 rounded-full flex-shrink-0 {{ $user['active'] ? 'bg-green-50 text-green-600' : 'bg-slate-100 text-slate-400' }}" style="font-weight:500">
-                    {{ $user['active'] ? 'aktif' : 'nonaktif' }}
-                </span>
-            </div>
-            @endforeach
-            @endforelse
-        </div>
-    </div>
-
-    {{-- Tim Admin --}}
-    <div class="bg-white rounded-2xl border border-slate-100">
-        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-            <h2 class="text-sm font-600 text-slate-700" style="font-weight:600">Tim Admin</h2>
-            <a href="{{ route('admin.admins.index') }}" class="text-xs text-brand-600 hover:text-brand-700 font-500" style="font-weight:500">Kelola →</a>
-        </div>
-        <div class="divide-y divide-slate-50">
-            @forelse($admins ?? [] as $admin)
-            <div class="flex items-center gap-3 px-6 py-4 hover:bg-slate-50 transition-colors">
-                <div class="w-9 h-9 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-sm font-500 text-slate-700" style="font-weight:500">{{ $admin->name }}</p>
-                    <p class="text-xs text-slate-400">{{ $admin->email }}</p>
-                </div>
-            </div>
-            @empty
-            @foreach([
-                ['name'=>'John Admin','email'=>'john@regoods.com'],
-                ['name'=>'Sarah Manager','email'=>'sarah@regoods.com'],
-            ] as $admin)
-            <div class="flex items-center gap-3 px-6 py-4 hover:bg-slate-50 transition-colors">
-                <div class="w-9 h-9 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                    </svg>
-                </div>
-                <div>
-                    <p class="text-sm font-500 text-slate-700" style="font-weight:500">{{ $admin['name'] }}</p>
-                    <p class="text-xs text-slate-400">{{ $admin['email'] }}</p>
-                </div>
-            </div>
-            @endforeach
-            @endforelse
         </div>
     </div>
 </div>

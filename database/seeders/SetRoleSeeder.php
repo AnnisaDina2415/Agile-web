@@ -16,15 +16,22 @@ class SetRoleSeeder extends Seeder
         $buyerRoleId = DB::table('roles')->where('role_name', 'pembeli')->value('id');
         $sellerRoleId = DB::table('roles')->where('role_name', 'penjual')->value('id');
 
-        $annisaId = DB::table('users')->where('email', 'annisa@gmail.com')->value('id');
-        $aidilId = DB::table('users')->where('email', 'aidil@gmail.com')->value('id');
-        $fikriId = DB::table('users')->where('email', 'fikri@gmail.com')->value('id');
+        $pembeliId = DB::table('users')->where('email', 'pembeli@gmail.com')->value('id');
+        $penjualId = DB::table('users')->where('email', 'penjual@gmail.com')->value('id');
+        $annisaId  = DB::table('users')->where('email', 'annisa@gmail.com')->value('id');
+        $aidilId   = DB::table('users')->where('email', 'aidil@gmail.com')->value('id');
 
         DB::table('set_roles')->insert([
-            ['user_id' => $annisaId, 'role_id' => $buyerRoleId],
-            ['user_id' => $aidilId, 'role_id' => $buyerRoleId],
-            ['user_id' => $aidilId, 'role_id' => $sellerRoleId],
-            ['user_id' => $fikriId, 'role_id' => $buyerRoleId],
+            // pembeli@gmail.com → role pembeli
+            ['user_id' => $pembeliId, 'role_id' => $buyerRoleId],
+            // penjual@gmail.com → role pembeli + penjual
+            ['user_id' => $penjualId, 'role_id' => $buyerRoleId],
+            ['user_id' => $penjualId, 'role_id' => $sellerRoleId],
+            // annisa@gmail.com → role pembeli
+            ['user_id' => $annisaId,  'role_id' => $buyerRoleId],
+            // aidil@gmail.com → role pembeli + penjual
+            ['user_id' => $aidilId,   'role_id' => $buyerRoleId],
+            ['user_id' => $aidilId,   'role_id' => $sellerRoleId],
         ]);
     }
 }

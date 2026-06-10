@@ -37,7 +37,7 @@
                 $isCurrentUser = $message->sender_id === Auth::id();
             @endphp
             
-            <div class="mb-4 {{ $isCurrentUser ? 'text-right' : 'text-left' }}">
+            <div class="mb-4 {{ $isCurrentUser ? 'text-right' : 'text-left' }}" data-message-id="{{ $message->id }}">
                 <div class="inline-block {{ $isCurrentUser ? 'bg-emerald-500 text-white' : 'bg-gray-200 text-gray-800' }} rounded-2xl px-4 py-2 max-w-xs">
                     <p class="text-sm">{{ $message->message }}</p>
                     <p class="text-xs {{ $isCurrentUser ? 'text-emerald-100' : 'text-gray-600' }} mt-1">
@@ -103,7 +103,7 @@
 
         async function poll() {
             try {
-                const res = await fetch(`{{ url('chat') }}/${window.CONVERSATION_ID}/poll?after_id=${lastId}`);
+                const res = await fetch(`{{ url('chat') }}/{{ $conversation->id }}/poll?after_id=${lastId}`);
                 if (!res.ok) return;
                 const data = await res.json();
                 if (!data.messages || data.messages.length === 0) return;

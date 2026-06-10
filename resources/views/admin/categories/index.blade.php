@@ -17,20 +17,20 @@
 </div>
 
 @if (session('success'))
-    <div class="mb-4 p-4 bg-green-50 text-green-700 rounded-lg border border-green-200">
+    <div class="mb-4 p-4 bg-brand-100 text-brand-900 rounded-xl border border-brand-200">
         {{ session('success') }}
     </div>
 @endif
 
 <div class="grid gap-4">
     @forelse($categories as $category)
-    <div class="bg-white rounded-2xl border border-slate-100 p-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div class="glassmorphism rounded-3xl p-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between shadow-sm">
         <div>
             <p class="text-base font-semibold text-slate-800">{{ $category->name }}</p>
             <p class="text-sm text-slate-500">{{ $category->products_count ?? 0 }} produk tersedia</p>
         </div>
         <div class="flex flex-wrap items-center gap-3">
-            <a href="{{ route('admin.categories.edit', $category) }}" class="text-brand-600 hover:text-brand-700 font-semibold">Edit</a>
+            <a href="{{ route('admin.categories.edit', $category) }}" class="text-brand-700 hover:text-brand-600 font-semibold">Edit</a>
             <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" class="inline-block" onsubmit="return confirm('Hapus kategori ini?');">
                 @csrf
                 @method('DELETE')
@@ -39,7 +39,7 @@
         </div>
     </div>
     @empty
-    <div class="bg-white rounded-2xl border border-slate-100 p-5 text-center text-slate-500">Belum ada kategori.</div>
+    <div class="glassmorphism rounded-3xl p-5 text-center text-slate-500">Belum ada kategori.</div>
     @endforelse
 </div>
 
