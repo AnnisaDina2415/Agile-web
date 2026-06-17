@@ -37,11 +37,7 @@
 
         <!-- Brand -->
         <div style="padding:1rem 1.1rem; border-bottom:1px solid #F0F0F0; display:flex; align-items:center; gap:.6rem;">
-            <div style="width:34px; height:34px; background:#03AC0E; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                <svg style="width:18px; height:18px; color:#fff;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                </svg>
-            </div>
+            <img src="{{ asset('images/logo/logo.jpeg') }}" alt="ReGoods" style="height:34px; width:34px; border-radius:8px; object-fit:cover; flex-shrink:0;">
             <div>
                 <p style="font-size:.95rem; font-weight:700; color:#03AC0E; margin:0; line-height:1.1;">ReGoods</p>
                 <p style="font-size:.65rem; color:#9E9E9E; margin:.1rem 0 0;">Panel Admin</p>
